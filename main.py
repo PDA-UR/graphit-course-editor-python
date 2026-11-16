@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, QSize, pyqtSignal, QPointF, QLineF, QPoint, QMimeData, QRectF
 from PyQt6.QtGui import QPixmap, QPalette, QColor, QBrush, QPen, QPainter, QWheelEvent, QKeyEvent, QMouseEvent, QDrag, QIcon, QCursor, QTransform, QLinearGradient, QPainterPath
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QComboBox, QHBoxLayout, QScrollArea, QPushButton, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsRectItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QStackedLayout, QGridLayout, QLineEdit, QSizePolicy, QSpacerItem, QSplitter, QTabWidget, QColorDialog, QFileDialog
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QComboBox, QHBoxLayout, QScrollArea, QPushButton, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsRectItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QStackedLayout, QGridLayout, QLineEdit, QSizePolicy, QSpacerItem, QSplitter, QTabWidget, QColorDialog, QFileDialog, QDialog
 import sys
 import os
 import pandas as pd
@@ -10,6 +10,7 @@ from toolbar import Toolbar
 from style_palette_widget import StylePaletteWidget, ColorButton
 from node_palette_widget import NodePaletteWidget, NodePaletteNodeWidget 
 from status_bar import ModeWidget, NodeCounterWidget
+from project_manager import OpenProjectDialog
 
 """ TODO
 
@@ -77,6 +78,8 @@ class QGraphApplication(QApplication):
         self.window = None
 
         self.cursor_pos = QPointF(0., 0.)
+
+        self.project_path = ''
 
     def connect_nodes(self, source, sink):
         #source.add_connection_source(sink, connection_line)
@@ -180,7 +183,10 @@ class QGraphApplication(QApplication):
 
     def load_topic_list(self):
         topics = []
-        with open(self.PATH_LOAD_TOPICS, 'r') as f:
+        #with open(self.PATH_LOAD_TOPICS, 'r') as f:
+        topics_path = self.PATH_LOAD_TOPICS
+        topics_path = self.window.show_open_file_dialog('Open Node List')
+        with open(topics_path, 'r') as f:
             for line in f.readlines():
                 topics.append(line.strip())
         return topics
@@ -1293,6 +1299,25 @@ class MainWindow(QMainWindow):
         else:
             return ''
     
+    def show_open_project_dialog(self):
+        project_list = []
+        for project_dir in os.listdir(PROJECTS_PATH):
+            project_dir_content = os.listdir(f'{PROJECTS_PATH}/{project_dir}')
+            nodes_file = f'{project_dir}_nodes.csv'
+            connections_file = f'{project_dir}_connections.csv'
+            if nodes_file in project_dir_content and connections_file in project_dir_content:
+                project_list.append(project_dir)
+        #print(project_list)
+
+        if len(project_list) > 0:
+            dialog = OpenProjectDialog(project_list, self)
+
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                selected_project = dialog.selected_project
+                self.app.project_path = f'{PROJECTS_PATH}/{selected_project}'
+                self.app.load_nodes(f'{PROJECTS_PATH}/{selected_project}/{selected_project}_nodes.csv')
+                self.app.load_connections(f'{PROJECTS_PATH}/{selected_project}/{selected_project}_connections.csv')
+
     def show_open_file_dialog(self, caption='Open File', filter=''):
         file_name, selectedFilter = QFileDialog.getOpenFileName(self, caption=caption, filter=filter)
         return file_name
@@ -1313,8 +1338,11 @@ class MainWindow(QMainWindow):
             if event.key() == Qt.Key.Key_S.value:
                 self.save_graph()
             elif event.key() == Qt.Key.Key_O.value:
-                self.load_graph()
+                #self.load_graph()
                 #self.app.load_graph(self.app.PATH_SAVE_NODES, self.app.PATH_SAVE_CONNECTIONS)
+                self.show_open_project_dialog()
+            elif event.key() == Qt.Key.Key_A.value:
+                self.scene.select_all()
 
         else:
             if event.key() == Qt.Key.Key_C.value:
@@ -1326,8 +1354,6 @@ class MainWindow(QMainWindow):
             elif event.key() == Qt.Key.Key_X.value:
                 self.app.MODE = self.app.MODE_CUT
                 self.app.mode_changed.emit()
-            elif event.key() == Qt.Key.Key_A.value:
-                self.scene.select_all()
             elif event.key() == Qt.Key.Key_Delete.value:
                 self.scene.delete_selection()
 

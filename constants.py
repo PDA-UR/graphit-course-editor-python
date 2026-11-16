@@ -1,6 +1,8 @@
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QIcon, QColor, QBrush, QPen
 
+PROJECTS_PATH = 'projects'
+
 ALIGN_TO_MEAN = 'align_to_mean'
 ALIGN_TO_FIRST = 'align_to_first'
 

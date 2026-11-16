@@ -21,7 +21,8 @@ class Toolbar(QVBoxLayout):
         button_open.setIcon(ICON_OPEN)
         button_open.setIconSize(SIZE_TOOLBAR_ICON)
         #button_open.clicked.connect(lambda fn: self.app.load_graph(self.app.PATH_SAVE_NODES, self.app.PATH_SAVE_CONNECTIONS))
-        button_open.clicked.connect(self.window.load_graph)
+        #button_open.clicked.connect(self.window.load_graph)
+        button_open.clicked.connect(self.window.show_open_project_dialog)
         button_open.setToolTip('Open Graph')
         self.addWidget(button_open)
 
