@@ -11,6 +11,7 @@ from style_palette_widget import StylePaletteWidget, ColorButton
 from node_palette_widget import NodePaletteWidget, NodePaletteNodeWidget 
 from status_bar import ModeWidget, NodeCounterWidget, ModeSelectionWidget
 from project_manager import OpenProjectDialog
+from node_list_widget import NodeListWidget
 
 """ TODO
 
@@ -167,6 +168,7 @@ class QGraphApplication(QApplication):
             node.set_color(row.color)
             if row.color not in self.window.style_palette.color_list:
                 self.window.style_palette.add_color(row.color)
+        self.node_created.emit()
 
     def load_connections(self, path_connections):
         try:
@@ -189,10 +191,12 @@ class QGraphApplication(QApplication):
             source = self.get_node_by_id(source_id)
             sink = self.get_node_by_id(sink_id)
             self.connect_nodes(source, sink)
+        self.node_created.emit()
 
     def load_graph(self, path_nodes, path_connections):
         self.load_nodes(path_nodes)
         self.load_connections(path_connections)
+        self.node_created.emit()
 
     def get_cursor_position(self):
         return self.cursor_pos
@@ -325,6 +329,7 @@ class Node():
         self.app = QApplication.instance()
         self.app.nodes.append(self)
         self.color = '#636d83'
+        self.app.node_created.emit()
 
     def set_color(self, color_code):
         self.color = color_code
@@ -1186,6 +1191,7 @@ class MainWindow(QMainWindow):
         self.palette_tab_widget = QTabWidget()
         self.node_palette = NodePaletteWidget()
         self.style_palette = StylePaletteWidget()
+        self.node_manager = NodeListWidget(self.view)
         tool_bar_layout = Toolbar(self)
 
         ## status bar
@@ -1211,6 +1217,7 @@ class MainWindow(QMainWindow):
         x_layout.addWidget(self.view)
         self.palette_tab_widget.addTab(self.node_palette, 'Node Palette')
         self.palette_tab_widget.addTab(self.style_palette, 'Style Palette')
+        self.palette_tab_widget.addTab(self.node_manager, 'Node Manager')
         x_layout.addWidget(self.palette_tab_widget)
 
         y_layout.addLayout(x_layout)
