@@ -41,6 +41,10 @@ from project_manager import OpenProjectDialog
  * "Meta Nodes"
    * for things like "belongs to course session"
    * should be able to hide connections
+ * proper ID management when nodes get deleted
+   * node IDs are assigned in the constructor and incremented
+   * upon deletion, there is a gap in the ID list
+   * when saving and loading the graph, newly created nodes after loading get wrong IDs as the counter is too low
 
 DONE:
  * cut connections
@@ -79,7 +83,12 @@ class QGraphApplication(QApplication):
 
         self.cursor_pos = QPointF(0., 0.)
 
+        self.project_name = ''
         self.project_path = ''
+
+        # used for re-mapping node ids
+        self.node_id_map = {}
+
 
     def connect_nodes(self, source, sink):
         #source.add_connection_source(sink, connection_line)
@@ -97,21 +106,30 @@ class QGraphApplication(QApplication):
         return False
 
     def save_graph(self, file_name=''):
-        try:
-            if file_name == '':
-                path_nodes = self.PATH_SAVE_NODES
-                path_connections = self.PATH_SAVE_CONNECTIONS
-            else:
-                if '.csv' in file_name:
-                    file_name = file_name.replace('.csv', '')
-                path_nodes = f'{file_name}_nodes.csv'
-                path_connections = f'{file_name}_connections.csv'
-        except:
-            path_nodes = self.PATH_SAVE_NODES
-            path_connections = self.PATH_SAVE_CONNECTIONS
+        #try:
+        #    if file_name == '':
+        #        path_nodes = self.PATH_SAVE_NODES
+        #        path_connections = self.PATH_SAVE_CONNECTIONS
+        #    else:
+        #        if '.csv' in file_name:
+        #            file_name = file_name.replace('.csv', '')
+        #        path_nodes = f'{file_name}_nodes.csv'
+        #        path_connections = f'{file_name}_connections.csv'
+        #except:
+        #    path_nodes = self.PATH_SAVE_NODES
+        #    path_connections = self.PATH_SAVE_CONNECTIONS
 
         nodes_list = []
 
+        path_nodes = f'{PROJECTS_PATH}/{file_name}/{file_name}_nodes.csv'
+        path_connections = f'{PROJECTS_PATH}/{file_name}/{file_name}_connections.csv'
+
+        try:
+            if not os.path.exists(f'{PROJECTS_PATH}/{file_name}'):
+                os.mkdir(f'{PROJECTS_PATH}/{file_name}')
+        except:
+            print(f'Project directory "{PROJECTS_PATH}/{file_name}" does not exist and could not be created.')
+            return
 
         for node in self.nodes:
             scene_pos = node.widget.getScenePos()
@@ -149,13 +167,18 @@ class QGraphApplication(QApplication):
     def load_nodes(self, path_nodes):
         df_nodes = pd.read_csv(path_nodes)#, index='id')
 
+        self.node_id_map = {}
+
         for i, row in df_nodes.iterrows():
             id = row.id
             label = row.label
             x = row.x
             y = row.y
             node = Node(label, x, y)
-            node.id = id
+            if node.id != id:
+                print(f're-mappig id: {id} -> {node.id}')
+                self.node_id_map[id] = node.id
+            #node.id = id
             #self.node_created.emit(node)
             self.window.scene.add_node(node)
             node.set_color(row.color)
@@ -170,8 +193,18 @@ class QGraphApplication(QApplication):
 
         for i, row in df_connections.iterrows():
             id = row.id
-            source = self.get_node_by_id(row.source)
-            sink = self.get_node_by_id(row.sink)
+
+            source_id = row.source
+            sink_id = row.sink
+
+            # re-map connection ids
+            if source_id in self.node_id_map.keys():
+                source_id = self.node_id_map[source_id]
+            if sink_id in self.node_id_map.keys():
+                sink_id = self.node_id_map[sink_id]
+
+            source = self.get_node_by_id(source_id)
+            sink = self.get_node_by_id(sink_id)
             self.connect_nodes(source, sink)
 
     def load_graph(self, path_nodes, path_connections):
@@ -332,8 +365,10 @@ class Node():
     id_counter = 0
     def __init__(self, label, x=0, y=0):
         self.id = Node.id_counter
+        print('adding node with id', self.id)
         Node.id_counter += 1
         self.label = label
+        #self.label = f'{label} ({self.id})'
         self.x = x
         self.y = y
         self.app = QApplication.instance()
@@ -1314,6 +1349,7 @@ class MainWindow(QMainWindow):
 
             if dialog.exec() == QDialog.DialogCode.Accepted:
                 selected_project = dialog.selected_project
+                self.app.project_name = selected_project
                 self.app.project_path = f'{PROJECTS_PATH}/{selected_project}'
                 self.app.load_nodes(f'{PROJECTS_PATH}/{selected_project}/{selected_project}_nodes.csv')
                 self.app.load_connections(f'{PROJECTS_PATH}/{selected_project}/{selected_project}_connections.csv')
@@ -1322,10 +1358,13 @@ class MainWindow(QMainWindow):
         file_name, selectedFilter = QFileDialog.getOpenFileName(self, caption=caption, filter=filter)
         return file_name
 
-    def save_graph(self):
-        file_name, ok_clicked = QInputDialog.getText(self, 'Enter Project Name for Saving', 'Name:')
-        if ok_clicked:
-            self.app.save_graph(file_name)
+    def save_graph(self, file_name=''):
+        if file_name == '':
+            file_name, ok_clicked = QInputDialog.getText(self, 'Enter Project Name for Saving', 'Name:')
+            if not ok_clicked:
+                return
+
+        self.app.save_graph(file_name)
 
     def load_graph(self):
         node_path = self.show_open_file_dialog(caption='Open Node File', filter='*.csv')
@@ -1336,7 +1375,10 @@ class MainWindow(QMainWindow):
         #app = QApplication.instance()
         if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
             if event.key() == Qt.Key.Key_S.value:
-                self.save_graph()
+                if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
+                    self.save_graph()
+                else:
+                    self.save_graph(self.app.project_name)
             elif event.key() == Qt.Key.Key_O.value:
                 #self.load_graph()
                 #self.app.load_graph(self.app.PATH_SAVE_NODES, self.app.PATH_SAVE_CONNECTIONS)
