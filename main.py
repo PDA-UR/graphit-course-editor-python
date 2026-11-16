@@ -9,7 +9,7 @@ from constants import *
 from toolbar import Toolbar
 from style_palette_widget import StylePaletteWidget, ColorButton
 from node_palette_widget import NodePaletteWidget, NodePaletteNodeWidget 
-from status_bar import ModeWidget, NodeCounterWidget
+from status_bar import ModeWidget, NodeCounterWidget, ModeSelectionWidget
 from project_manager import OpenProjectDialog
 
 """ TODO
@@ -33,6 +33,7 @@ from project_manager import OpenProjectDialog
  * buttons to switch modes via GUI
  * use proper shortcut handling of PyQt6
  * exception handling for cancelled file opening
+   * might be obsolete with new "project manager"
  * distribute code to more files
  * lasso selection
    * should be very similar to cut mode?
@@ -45,6 +46,7 @@ from project_manager import OpenProjectDialog
    * node IDs are assigned in the constructor and incremented
    * upon deletion, there is a gap in the ID list
    * when saving and loading the graph, newly created nodes after loading get wrong IDs as the counter is too low
+ * icons for modes
 
 DONE:
  * cut connections
@@ -315,7 +317,7 @@ class Node():
     id_counter = 0
     def __init__(self, label, x=0, y=0):
         self.id = Node.id_counter
-        print('adding node with id', self.id)
+        #print('adding node with id', self.id)
         Node.id_counter += 1
         self.label = label
         self.x = x
@@ -1189,9 +1191,11 @@ class MainWindow(QMainWindow):
         ## status bar
 
         status_bar_layout = QHBoxLayout()
+        mode_selection_widget = ModeSelectionWidget()
         mode_widget = ModeWidget()
         node_counter_widget = NodeCounterWidget(self)
 
+        status_bar_layout.addWidget(mode_selection_widget)
         status_bar_layout.addWidget(mode_widget)
 
         divider = QFrame() 

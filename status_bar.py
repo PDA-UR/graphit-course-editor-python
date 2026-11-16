@@ -1,5 +1,63 @@
-from PyQt6.QtWidgets import QApplication, QLabel
+from PyQt6.QtWidgets import QApplication, QLabel, QPushButton, QHBoxLayout, QWidget, QSizePolicy
 from constants import *
+
+class ModeSelectionWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.app = QApplication.instance()
+        self.layout = QHBoxLayout()
+
+        self.btn_selection_mode = QPushButton()
+        self.btn_selection_mode.setIcon(ICON_PLACEHOLDER)
+        self.btn_selection_mode.setIconSize(SIZE_TOOLBAR_ICON)
+        self.btn_selection_mode.setCheckable(True)
+        self.btn_selection_mode.setToolTip('Selection Mode')
+        self.btn_selection_mode.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        self.btn_selection_mode.clicked.connect(self.selection_mode_button_clicked)
+        self.btn_selection_mode.setChecked(True)
+
+        self.btn_connection_mode = QPushButton()
+        self.btn_connection_mode.setIcon(ICON_PLACEHOLDER)
+        self.btn_connection_mode.setIconSize(SIZE_TOOLBAR_ICON)
+        self.btn_connection_mode.setCheckable(True)
+        self.btn_connection_mode.setToolTip('Connection Mode')
+        self.btn_connection_mode.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        self.btn_connection_mode.clicked.connect(self.connection_mode_button_clicked)
+
+        self.btn_cut_mode = QPushButton()
+        self.btn_cut_mode.setIcon(ICON_PLACEHOLDER)
+        self.btn_cut_mode.setIconSize(SIZE_TOOLBAR_ICON)
+        self.btn_cut_mode.setCheckable(True)
+        self.btn_cut_mode.setToolTip('Cut Mode')
+        self.btn_cut_mode.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        self.btn_cut_mode.clicked.connect(self.cut_mode_button_clicked)
+
+        self.layout.addWidget(self.btn_selection_mode)
+        self.layout.addWidget(self.btn_connection_mode)
+        self.layout.addWidget(self.btn_cut_mode)
+        self.setLayout(self.layout)
+        self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+
+    def selection_mode_button_clicked(self):
+        self.btn_selection_mode.setChecked(True)
+        self.btn_connection_mode.setChecked(False)
+        self.btn_cut_mode.setChecked(False)
+        self.app.MODE = self.app.MODE_SELECTION
+        self.app.mode_changed.emit()
+
+    def connection_mode_button_clicked(self):
+        self.btn_selection_mode.setChecked(False)
+        self.btn_connection_mode.setChecked(True)
+        self.btn_cut_mode.setChecked(False)
+        self.app.MODE = self.app.MODE_CONNECTION
+        self.app.mode_changed.emit()
+
+    def cut_mode_button_clicked(self):
+        self.btn_selection_mode.setChecked(False)
+        self.btn_connection_mode.setChecked(False)
+        self.btn_cut_mode.setChecked(True)
+        self.app.MODE = self.app.MODE_CUT
+        self.app.mode_changed.emit()
 
 class ModeWidget(QLabel):
     def __init__(self):
@@ -8,6 +66,8 @@ class ModeWidget(QLabel):
         self.setText(f'Mode: {self.app.MODE}')
         self.app.mode_changed.connect(self.modeChangedEvent)
         #self.scene = window.scene
+
+
 
     def modeChangedEvent(self):
         self.setText(f'Mode: {self.app.MODE}')
