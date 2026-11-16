@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="64" height="64" version="1.1" viewBox="0 0 16.933 16.933" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <marker id="marker22_Fnone_S-000000" overflow="visible" markerHeight="0.4" markerUnits="userSpaceOnUse" markerWidth="0.4" orient="auto" preserveAspectRatio="xMidYMid" viewBox="0 0 1 1">
+   <path transform="scale(.5)" d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z" fill-rule="evenodd"/>
+  </marker>
+  <marker id="marker21_Fnone_S-000000" overflow="visible" markerHeight="0.4" markerUnits="userSpaceOnUse" markerWidth="0.4" orient="auto" preserveAspectRatio="xMidYMid" viewBox="0 0 1 1">
+   <path transform="scale(.5)" d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z" fill-rule="evenodd"/>
+  </marker>
+  <marker id="Dot_Fnone_S-000000" overflow="visible" markerHeight="0.4" markerUnits="userSpaceOnUse" markerWidth="0.4" orient="auto" preserveAspectRatio="xMidYMid" viewBox="0 0 1 1">
+   <path transform="scale(.5)" d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z" fill-rule="evenodd"/>
+  </marker>
+ </defs>
+ <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width=".8">
+  <g stroke="#000">
+   <path d="m3.19 10.087-1.2949 3.7444" marker-end="url(#marker21_Fnone_S-000000)"/>
+   <path d="m5.1809 13.831 2.5605-3.7444 1.6345 3.7444" marker-end="url(#marker21_Fnone_S-000000)" marker-start="url(#marker22_Fnone_S-000000)"/>
+   <path d="m11.752 13.831 1.6672-3.7444 1.6186 3.7444" marker-end="url(#marker21_Fnone_S-000000)" marker-start="url(#marker22_Fnone_S-000000)"/>
+   <path d="m8.3544 1.9624v4.2113l-5.1644 3.8072" marker-end="url(#marker21_Fnone_S-000000)" marker-mid="url(#Dot_Fnone_S-000000)" marker-start="url(#marker22_Fnone_S-000000)"/>
+   <path d="m7.7414 9.9808 0.58959-3.8072 5.0887 3.8072" marker-end="url(#marker21_Fnone_S-000000)" marker-mid="url(#Dot_Fnone_S-000000)" marker-start="url(#marker22_Fnone_S-000000)"/>
+  </g>
+  <path x="0.3999995" y="0.3999995" width="16.133333" height="16.133333" d="m0.4 1.7108v-1.3108h1.3108m1.4117 0h2.6217m1.4117 0h2.6217m1.4117 0h2.6217m1.4117 0h1.3108v1.3108m0 1.4117v2.6217m0 1.4117v2.6217m0 1.4117v2.6217m0 1.4117v1.3108h-1.3108m-1.4117 0h-2.6217m-1.4117 0h-2.6217m-1.4117 0h-2.6217m-1.4117 0h-1.3108v-1.3108m0-1.4117v-2.6217m0-1.4117v-2.6217m0-1.4117v-2.6217m0-1.4117v-1.3108" stroke="#09b800"/>
+ </g>
+</svg>
