@@ -91,7 +91,6 @@ class QGraphApplication(QApplication):
 
 
     def connect_nodes(self, source, sink):
-        #source.add_connection_source(sink, connection_line)
         if not self.connection_exists(source, sink):
             connection = Connection(source, sink)
             self.connections.append(connection)
@@ -106,19 +105,6 @@ class QGraphApplication(QApplication):
         return False
 
     def save_graph(self, file_name=''):
-        #try:
-        #    if file_name == '':
-        #        path_nodes = self.PATH_SAVE_NODES
-        #        path_connections = self.PATH_SAVE_CONNECTIONS
-        #    else:
-        #        if '.csv' in file_name:
-        #            file_name = file_name.replace('.csv', '')
-        #        path_nodes = f'{file_name}_nodes.csv'
-        #        path_connections = f'{file_name}_connections.csv'
-        #except:
-        #    path_nodes = self.PATH_SAVE_NODES
-        #    path_connections = self.PATH_SAVE_CONNECTIONS
-
         nodes_list = []
 
         path_nodes = f'{PROJECTS_PATH}/{file_name}/{file_name}_nodes.csv'
@@ -140,8 +126,6 @@ class QGraphApplication(QApplication):
                                'color' : node.color})
 
         df_nodes = pd.DataFrame(nodes_list)
-        #print(df_nodes.columns)
-        #df_nodes.set_index('id')
 
         connections_list = []
 
@@ -151,12 +135,9 @@ class QGraphApplication(QApplication):
                                      'sink' : connection.sink.id})
 
         df_connections = pd.DataFrame(connections_list)
-        #df_connections.set_index('id')
 
         df_nodes.to_csv(path_nodes, index=False)
         df_connections.to_csv(path_connections, index=False)
-        #df_nodes.to_csv(self.PATH_SAVE_NODES, index=False)
-        #df_connections.to_csv(self.PATH_SAVE_CONNECTIONS, index=False)
 
     def get_node_by_id(self, id):
         for node in self.nodes:
@@ -165,7 +146,7 @@ class QGraphApplication(QApplication):
         return None
 
     def load_nodes(self, path_nodes):
-        df_nodes = pd.read_csv(path_nodes)#, index='id')
+        df_nodes = pd.read_csv(path_nodes)
 
         self.node_id_map = {}
 
@@ -187,7 +168,7 @@ class QGraphApplication(QApplication):
 
     def load_connections(self, path_connections):
         try:
-            df_connections = pd.read_csv(path_connections)#, index='id')
+            df_connections = pd.read_csv(path_connections)
         except pd.errors.EmptyDataError:
             return
 
@@ -216,7 +197,6 @@ class QGraphApplication(QApplication):
 
     def load_topic_list(self):
         topics = []
-        #with open(self.PATH_LOAD_TOPICS, 'r') as f:
         topics_path = self.PATH_LOAD_TOPICS
         topics_path = self.window.show_open_file_dialog('Open Node List')
         with open(topics_path, 'r') as f:
@@ -244,7 +224,6 @@ class QGraphApplication(QApplication):
                     intersects, intersection_point = connection_line.intersects(segment)
                     # intersection within the segment (in contrast to unbounded which assumes endless lines
                     if intersects == QLineF.IntersectionType.BoundedIntersection:
-                        #print(segment, 'intersects', connection.widget.line())
                         if connection not in connections_to_cut:
                             connections_to_cut.append(connection)
 
@@ -260,12 +239,9 @@ class Connection():
         self.sink = sink
         self.source.widget.on_move.connect(self.on_source_moved)
         self.sink.widget.on_move.connect(self.on_sink_moved)
-        #self.source.widget.on_move.connect(self.on_source_moved)
-        #self.sink.widget.on_move.connect(self.on_sink_moved)
 
         p1 = source.get_widget_center()
         p2 = sink.get_widget_center()
-        #connection_line = QGraphicsLineItem(QLineF(p1, p2))
         connection_line = ConnectionWidget(self, QLineF(p1, p2))
         connection_line.setZValue(-1)
         self.widget = connection_line
@@ -287,7 +263,6 @@ class Connection():
     def delete(self):
         self.app.connections.remove(self)
         self.app.window.scene.removeItem(self.widget)
-        #self.widget.deleteLater()
 
     def __repr__(self):
         return f'{self.source.label} ({self.source.id}) --> {self.sink.label} ({self.sink.id})'
@@ -308,11 +283,6 @@ class ConnectionWidget(QGraphicsLineItem):
 
         self.connection = connection
 
-    #def paintEvent(self, event):
-    #    painter = QPainter(self)
-    #    painter.setRenderHint(
-    #        QPainter.RenderHint.Antialiasing
-    #    )
     def paint(self, painter: QPainter, option, widget=None):
         line = self.line()
         start = line.p1()
@@ -321,10 +291,6 @@ class ConnectionWidget(QGraphicsLineItem):
         painter.save()
 
         if self.connection.source.widget.scene_widget in self.connection.app.window.scene.selectedItems() or self.connection.sink.widget.scene_widget in self.connection.app.window.scene.selectedItems():
-            #painter.save()
-            #painter.setPen(self.pen_selected)
-            #painter.drawLine(line)
-            #painter.restore()
             color_start = ConnectionWidget.LINE_GRADIENT_COLOR_SOURCE_SELECTED
             color_end = ConnectionWidget.LINE_GRADIENT_COLOR_SINK_SELECTED
         else:
@@ -336,7 +302,6 @@ class ConnectionWidget(QGraphicsLineItem):
         gradient.setColorAt(1.0, color_end)
 
         pen = QPen(QBrush(gradient), 5)
-        #pen.setCapStyle(Qt.PenCapStyle.RoundCap)
 
         painter.setPen(pen)
         painter.drawLine(line)
@@ -344,21 +309,6 @@ class ConnectionWidget(QGraphicsLineItem):
         painter.restore()
 
         super().paint(painter, option, widget)
-
-        # draw little circle on start node
-        #painter.save()
-        #painter.setBrush(QBrush(Qt.GlobalColor.black))
-        #painter.setPen(Qt.PenStyle.NoPen)
-
-        ### TODO: place marker on intersection, which is PITA with a rounded rect
-        ### currently, this does nothing
-
-        #painter.drawEllipse(
-        #    start,
-        #    self.marker_radius,
-        #    self.marker_radius
-        #)
-        #painter.restore()
         
 
 class Node():
@@ -368,7 +318,6 @@ class Node():
         print('adding node with id', self.id)
         Node.id_counter += 1
         self.label = label
-        #self.label = f'{label} ({self.id})'
         self.x = x
         self.y = y
         self.app = QApplication.instance()
@@ -376,7 +325,6 @@ class Node():
         self.color = '#636d83'
 
     def set_color(self, color_code):
-        #print('node set color')
         self.color = color_code
         self.widget.set_color(color_code)
 
@@ -395,7 +343,6 @@ class Node():
         result = []
         for connection in connections:
             if connection.sink.id == self.id:
-                #print(connection)
                 result.append(connection)
         return result
 
@@ -404,7 +351,6 @@ class Node():
         result = []
         for connection in connections:
             if connection.source.id == self.id:
-                #print(connection)
                 result.append(connection)
         return result
 
@@ -413,7 +359,6 @@ class Node():
         to_delete = []
         for connection in connections:
             if connection.sink.id == self.id or connection.source.id == self.id:
-                #print(connection)
                 to_delete.append(connection)
 
         for connection in to_delete:
@@ -432,11 +377,6 @@ class Node():
 class NodeWidget(QFrame):
     MAX_LABEL_WIDTH = NODE_WIDGET_MAX_LABEL_WIDTH
     MAX_WIDGET_HEIGHT = NODE_WIDGET_MAX_WIDGET_HEIGHT
-    #STYLE_SHEET_NORMAL = 'QFrame { border: 2px solid #383c4a; border-radius: 20px}'
-    #STYLE_SHEET_SELECTED = 'QFrame { border: 2px solid #282c34; border-radius: 20px}'
-    #STYLE_SHEET_BACKGROUND_NORMAL = 'QFrame {background-color: #636d83}'
-    #STYLE_SHEET_BACKGROUND_HOVER = 'QFrame {background-color: #767e8d}'
-    #STYLE_SHEET_LABEL = 'QLabel { border: 0px }'
     CORNER_RADIUS = NODE_WIDGET_CORNER_RADIUS
 
     PEN_BLACK = QPen(QColor('#000000'), 3, Qt.PenStyle.SolidLine)
@@ -491,7 +431,6 @@ class NodeWidget(QFrame):
             self.label.setStyleSheet('color: white')
         else:
             self.label.setStyleSheet('color: black')
-        #print('widget set color', self.current_color)
 
     def delete(self):
         self.scene_widget.delete()
@@ -562,32 +501,19 @@ class NodeWidget(QFrame):
         pass
 
     def hoverEnterEvent(self, event):
-        #self.background_widget.setStyleSheet(NodeWidget.STYLE_SHEET_BACKGROUND_HOVER)
-        #self.current_brush = NodeWidget.BRUSH_HOVER
         hover_color = self.current_color
         hover_color = hover_color.lighter(150)
         self.current_brush = QBrush(hover_color)
         self.is_hovering = True
 
     def hoverLeaveEvent(self, event):
-        #self.current_brush = NodeWidget.BRUSH_NORMAL
         self.current_brush = QBrush(self.current_color)
-        #self.background_widget.setStyleSheet(NodeWidget.STYLE_SHEET_BACKGROUND_NORMAL)
         self.is_hovering = False
 
     def mouseDoubleClickEvent(self, event):
-        #print("double clicked")
-        #new_label = self.app.window.show_label_input_dialog(self.node.label)
-        #self.node.label = new_label
-        #self.label.setText(new_label)
-        #event.accept()
         pass
 
     def moveEvent(self, event):
-        #print("moved")
-        #scene_pos = self.scene_widget.scenePos()
-        #self.node.x = scene_pos.x()
-        #self.node.y = scene_pos.y()
         self.on_move.emit()
 
     def freeze(self):
@@ -631,13 +557,9 @@ class DraggableProxyWidget(QGraphicsProxyWidget):
 
     def ItemSelectedHasChanged(self, event):
         pass
-        #print("select", event)
 
     def ItemPositionHasChanged(self, event):
         self.widget().moveEvent(event)
-
-    #def itemChange(self, change, value):
-    #    self.widget().itemChange(change, value)
 
     ## TODO does nothing
     def itemChange(self, change, value):
@@ -660,7 +582,6 @@ class GraphScene(QGraphicsScene):
         tmp_widget = NodeWidget(tmp_node, proxy)
         proxy.setWidget(tmp_widget)
         self.addItem(proxy)
-        #proxy = self.scene.addWidget(tmp_widget)
         proxy.setFlag(
                     QGraphicsItem.GraphicsItemFlag.ItemIsMovable,
                     True
@@ -699,10 +620,8 @@ class GraphScene(QGraphicsScene):
 
     def mouseDoubleClickEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
-            #print(event.scenePos().x(), event.scenePos().y())
             item_at_click_position = self.itemAt(event.scenePos(), QTransform())
 
-            #if len(label) > 0:
             if isinstance(item_at_click_position, DraggableProxyWidget):
                 label = self.window.show_label_input_dialog(item_at_click_position.widget().node.label)
                 if len(label) > 0:
@@ -720,7 +639,6 @@ class GraphScene(QGraphicsScene):
         y_coords = []
 
         for scene_widget in widgets_selected:
-            #print(scene_widget, type(scene_widget))
             widget = scene_widget.widget()
             scene_pos = widget.getScenePos()
             y = scene_pos.y()
@@ -798,24 +716,17 @@ class GraphScene(QGraphicsScene):
         center_y = int(np.mean(y_coords))
         center = QPoint(center_x, center_y)
 
-        #print('center:', center_x, center_y)
-
         node_width = widest + GraphScene.GAP_SIZE
         node_height = highest + GraphScene.GAP_SIZE
 
-        #print('node_size:', node_width, node_height)
-
         x_offset = int(node_width * n_columns / 2)
         y_offset = int(node_height * n_rows / 2)
-
-        #print('offsets:', x_offset, y_offset)
 
         col_counter = 0
         row_counter = 0
         for widget in widgets_selected:
             new_x = (center_x - x_offset) + (node_width * col_counter)
             new_y = (center_y - y_offset) + (node_height * row_counter)
-            #print(new_x, new_y)
             widget.widget().move(int(new_x), int(new_y))
             col_counter += 1
             if col_counter >= n_columns:
@@ -823,7 +734,6 @@ class GraphScene(QGraphicsScene):
                 row_counter += 1
 
     def distribute_vertical(self):
-        #print('distribute')
         # TODO not efficient!
         widgets_selected = self.selectedItems()
         y_coords = []
@@ -832,12 +742,9 @@ class GraphScene(QGraphicsScene):
         total_height = 0
 
         for scene_widget in widgets_selected:
-            #print(scene_widget, type(scene_widget))
             widget = scene_widget.widget()
             scene_pos = widget.getScenePos()
-            #x = scene_pos.x()
             y = scene_pos.y()
-            #y_coords.append(y)
             nodes_to_sort[widget.node] = y
             total_height += scene_widget.boundingRect().height()
 
@@ -867,7 +774,6 @@ class GraphScene(QGraphicsScene):
             widget.move(int(x), int(new_y))
 
     def distribute_horizontal(self):
-        #print('distribute')
         # TODO not efficient!
         widgets_selected = self.selectedItems()
         x_coords = []
@@ -876,11 +782,9 @@ class GraphScene(QGraphicsScene):
         total_width = 0
 
         for scene_widget in widgets_selected:
-            #print(scene_widget, type(scene_widget))
             widget = scene_widget.widget()
             scene_pos = widget.getScenePos()
             x = scene_pos.x()
-            #y_coords.append(y)
             nodes_to_sort[widget.node] = x
             total_width += scene_widget.boundingRect().width()
 
@@ -947,11 +851,9 @@ class GraphScene(QGraphicsScene):
             node.widget.scene_widget.setSelected(True)
 
     def set_selection_mode_rect(self):
-        #app = QApplication.instance()
         self.selection_mode = self.app.SELECTION_MODE_RECT
 
     def set_selection_mode_lasso(self):
-        #app = QApplication.instance()
         self.selection_mode = self.app.SELECTION_MODE_LASSO
 
     def shrink_selection(self):
@@ -1081,7 +983,6 @@ class GraphView(QGraphicsView):
                               w, h) 
 
                 painter.setPen(NodeWidget.PEN_NORMAL)
-                #painter.setBrush(NodeWidget.BRUSH_HOVER)
                 painter.setBrush(QBrush(hovered_widget.widget().current_color))
                 painter.drawRoundedRect(rect, NodeWidget.CORNER_RADIUS, NodeWidget.CORNER_RADIUS)
 
@@ -1097,18 +998,14 @@ class GraphView(QGraphicsView):
         painter.setPen(QPen(QColor('red')))
         if self.app.MODE == self.app.MODE_CUT:
             if len(self.cut_mode_line) > 1:
-                #line = self.mapToScene(self.cut_mode_line)
                 line = []
                 for i, point in enumerate(self.cut_mode_line):
                     line.append(self.mapToScene(point))
                 painter.drawPolyline(line)
-                #painter.drawPolyline(self.cut_mode_line)
 
     def paintEvent(self, event):
-        #app = QApplication.instance()
         painter = QPainter()
         painter.begin(self.viewport())
-        #painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         
         painter.setPen(GraphView.PEN_CONNECTION_PREVIEW)
@@ -1123,9 +1020,6 @@ class GraphView(QGraphicsView):
         painter.end()
 
         super().paintEvent(event)
-
-    #def mouseMoveEvent(self, event: QMouseEvent):
-    #    self.repaint()
 
     def zoom_by(self, factor):
         new_zoom = self.zoom * factor
@@ -1147,19 +1041,14 @@ class GraphView(QGraphicsView):
             super().wheelEvent(event)
 
     def keyPressEvent(self, event: QKeyEvent):
-        #print(event.key())
         if event.key() == Qt.Key.Key_Space and not event.isAutoRepeat():
             self.panning = True
-            #if not self.panning:
-            #    self.setCursor(Qt.CursorShape.OpenHandCursor)
-            #event.accept()
             return
         elif event.key() == Qt.Key.Key_Equal:
             if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
                 self.scene.distribute_vertical()
             else:
                 self.scene.align_nodes_vertical()
-        #elif event.key() == Qt.Key.Key_Bar:
         elif event.key() == Qt.Key.Key_QuoteDbl or event.key() == Qt.Key.Key_Bar:
             if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
                 self.scene.distribute_horizontal()
@@ -1342,7 +1231,6 @@ class MainWindow(QMainWindow):
             connections_file = f'{project_dir}_connections.csv'
             if nodes_file in project_dir_content and connections_file in project_dir_content:
                 project_list.append(project_dir)
-        #print(project_list)
 
         if len(project_list) > 0:
             dialog = OpenProjectDialog(project_list, self)
@@ -1380,8 +1268,6 @@ class MainWindow(QMainWindow):
                 else:
                     self.save_graph(self.app.project_name)
             elif event.key() == Qt.Key.Key_O.value:
-                #self.load_graph()
-                #self.app.load_graph(self.app.PATH_SAVE_NODES, self.app.PATH_SAVE_CONNECTIONS)
                 self.show_open_project_dialog()
             elif event.key() == Qt.Key.Key_A.value:
                 self.scene.select_all()
