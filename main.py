@@ -12,6 +12,7 @@ from node_palette_widget import NodePaletteWidget, NodePaletteNodeWidget
 from status_bar import ModeWidget, NodeCounterWidget, ModeSelectionWidget
 from project_manager import OpenProjectDialog
 from node_list_widget import NodeListWidget
+from selection_manager import SelectionManager
 
 """ TODO
 
@@ -38,7 +39,6 @@ from node_list_widget import NodeListWidget
  * distribute code to more files
  * lasso selection
    * should be very similar to cut mode?
- * save/restore selection
  * constant naming for lock/freeze feature
  * "Meta Nodes"
    * for things like "belongs to course session"
@@ -47,7 +47,7 @@ from node_list_widget import NodeListWidget
    * node IDs are assigned in the constructor and incremented
    * upon deletion, there is a gap in the ID list
    * when saving and loading the graph, newly created nodes after loading get wrong IDs as the counter is too low
- * icons for modes
+ * save and load stored selections
 
 DONE:
  * cut connections
@@ -56,6 +56,8 @@ DONE:
  * show number of nodes/selected nodes in status bar
  * [bug] check file name creation in save function
  * freeze/unfreeze selection
+ * icons for modes
+ * save/restore selection
 
 """
 
@@ -1192,6 +1194,7 @@ class MainWindow(QMainWindow):
         self.node_palette = NodePaletteWidget()
         self.style_palette = StylePaletteWidget()
         self.node_manager = NodeListWidget(self.view)
+        self.selection_manager = SelectionManager(self)
         tool_bar_layout = Toolbar(self)
 
         ## status bar
@@ -1218,6 +1221,7 @@ class MainWindow(QMainWindow):
         self.palette_tab_widget.addTab(self.node_palette, 'Node Palette')
         self.palette_tab_widget.addTab(self.style_palette, 'Style Palette')
         self.palette_tab_widget.addTab(self.node_manager, 'Node Manager')
+        self.palette_tab_widget.addTab(self.selection_manager, 'Selection Manager')
         x_layout.addWidget(self.palette_tab_widget)
 
         y_layout.addLayout(x_layout)
