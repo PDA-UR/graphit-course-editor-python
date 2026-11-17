@@ -27,6 +27,9 @@ ICON_DELETE_CONNECTIONS = QIcon('icons/delete_connections.svg')
 ICON_MERGE_NODES = QIcon('icons/merge.svg')
 ICON_LOCK_NODES = QIcon('icons/lock.svg')
 ICON_UNLOCK_NODES = QIcon('icons/unlock.svg')
+ICON_MODE_SELECTION = QIcon('icons/mode_selection.svg')
+ICON_MODE_CONNECTION = QIcon('icons/mode_connection.svg')
+ICON_MODE_CUT = QIcon('icons/mode_cut.svg')
 
 
 NODE_WIDGET_MAX_LABEL_WIDTH = 300

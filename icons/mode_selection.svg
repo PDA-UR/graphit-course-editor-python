@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   version="1.1"
+   viewBox="0 0 16.933 16.933"
+   id="svg9"
+   sodipodi:docname="mode_selection.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview9"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="5.234011"
+     inkscape:cx="14.233826"
+     inkscape:cy="29.614"
+     inkscape:window-width="1916"
+     inkscape:window-height="929"
+     inkscape:window-x="0"
+     inkscape:window-y="149"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg9" />
+  <defs
+     id="defs3">
+    <marker
+       id="marker22_Fnone_S-000000"
+       overflow="visible"
+       markerHeight="0.4"
+       markerUnits="userSpaceOnUse"
+       markerWidth="0.4"
+       orient="auto"
+       preserveAspectRatio="xMidYMid"
+       viewBox="0 0 1 1">
+      <path
+         transform="scale(.5)"
+         d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z"
+         fill-rule="evenodd"
+         id="path1" />
+    </marker>
+    <marker
+       id="marker21_Fnone_S-000000"
+       overflow="visible"
+       markerHeight="0.4"
+       markerUnits="userSpaceOnUse"
+       markerWidth="0.4"
+       orient="auto"
+       preserveAspectRatio="xMidYMid"
+       viewBox="0 0 1 1">
+      <path
+         transform="scale(.5)"
+         d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z"
+         fill-rule="evenodd"
+         id="path2" />
+    </marker>
+    <marker
+       id="Dot_Fnone_S-000000"
+       overflow="visible"
+       markerHeight="0.4"
+       markerUnits="userSpaceOnUse"
+       markerWidth="0.4"
+       orient="auto"
+       preserveAspectRatio="xMidYMid"
+       viewBox="0 0 1 1">
+      <path
+         transform="scale(.5)"
+         d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z"
+         fill-rule="evenodd"
+         id="path3" />
+    </marker>
+  </defs>
+  <path
+     x="0.3999995"
+     y="0.3999995"
+     width="16.133333"
+     height="16.133333"
+     d="m 0.2441255,9.2906315 v 0.8000005 h 0.8 m 0.8615807,0 h 1.600061 m 0.8615808,0 h 1.600061 m 0.8615807,0 h 1.600061 m 0.8615808,0 H 10.090632 V 9.2906315 m 0,-0.8615807 v -1.600061 m 0,-0.8615808 V 4.367348 m 0,-0.8615807 v -1.600061 m 0,-0.8615808 v -0.8 H 9.2906315 m -0.8615808,0 h -1.600061 m -0.8615807,0 H 4.367348 m -0.8615808,0 h -1.600061 m -0.8615807,0 h -0.8 v 0.8 m 0,0.8615808 v 1.600061 m 0,0.8615807 v 1.600061 m 0,0.8615808 v 1.600061 m 0,0.8615807 v 0.8000005"
+     stroke="#09b800"
+     id="path9"
+     style="fill:none;stroke-width:0.52915625;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" />
+  <g
+     id="g3477"
+     transform="matrix(0.44960386,-0.33651115,0.33651115,0.44960386,-34.095464,7.5477388)"
+     style="fill:#ffffff;stroke:#000000;stroke-width:0.79375;stroke-miterlimit:4;stroke-dasharray:none">
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.79375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 59.904045,62.899506 -0.201132,-3.472489 -2.294469,-0.208807 3.415313,-8.038121 3.415313,8.038121 -2.294469,0.208807 -0.201132,3.472489 h -0.919712 z"
+       id="path3362"
+       sodipodi:nodetypes="ccccccccc" />
+  </g>
+</svg>

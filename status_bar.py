@@ -8,7 +8,7 @@ class ModeSelectionWidget(QWidget):
         self.layout = QHBoxLayout()
 
         self.btn_selection_mode = QPushButton()
-        self.btn_selection_mode.setIcon(ICON_PLACEHOLDER)
+        self.btn_selection_mode.setIcon(ICON_MODE_SELECTION)
         self.btn_selection_mode.setIconSize(SIZE_TOOLBAR_ICON)
         self.btn_selection_mode.setCheckable(True)
         self.btn_selection_mode.setToolTip('Selection Mode')
@@ -17,7 +17,7 @@ class ModeSelectionWidget(QWidget):
         self.btn_selection_mode.setChecked(True)
 
         self.btn_connection_mode = QPushButton()
-        self.btn_connection_mode.setIcon(ICON_PLACEHOLDER)
+        self.btn_connection_mode.setIcon(ICON_MODE_CONNECTION)
         self.btn_connection_mode.setIconSize(SIZE_TOOLBAR_ICON)
         self.btn_connection_mode.setCheckable(True)
         self.btn_connection_mode.setToolTip('Connection Mode')
@@ -25,7 +25,7 @@ class ModeSelectionWidget(QWidget):
         self.btn_connection_mode.clicked.connect(self.connection_mode_button_clicked)
 
         self.btn_cut_mode = QPushButton()
-        self.btn_cut_mode.setIcon(ICON_PLACEHOLDER)
+        self.btn_cut_mode.setIcon(ICON_MODE_CUT)
         self.btn_cut_mode.setIconSize(SIZE_TOOLBAR_ICON)
         self.btn_cut_mode.setCheckable(True)
         self.btn_cut_mode.setToolTip('Cut Mode')
