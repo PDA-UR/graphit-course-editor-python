@@ -8,7 +8,7 @@ import numpy as np
 from constants import *
 from toolbar import Toolbar
 from style_palette_widget import StylePaletteWidget
-from node_palette_widget import NodePaletteWidget
+from node_palette_widget import NodePaletteWidget, NodePaletteNodeWidget
 from status_bar import ModeWidget, NodeCounterWidget, ModeSelectionWidget
 from project_manager import OpenProjectDialog
 from node_list_widget import NodeListWidget
@@ -25,8 +25,6 @@ from selection_manager import SelectionManager
  * dedicated config file
  * project files
  * modifier + click to select subgraph
- * drag/drop (or paste) text directly as nodes
-   * warning if long text is pasted
  * snap to grid
  * in case of performance issues: use more efficient way to handle connections
    * (we currently have a central list of all connection which we iterate over)
@@ -60,6 +58,8 @@ DONE:
  * icons for modes
  * save/restore selection
  * buttons to switch modes via GUI
+ * drag/drop (or paste) text directly as nodes
+   * warning if long text is pasted
 
 """
 
@@ -691,14 +691,17 @@ class GraphScene(QGraphicsScene):
             y = scene_pos.y()
             widget.move(int(new_x), int(y))
 
-    def arrange_square(self):
+    def arrange_square(self, items_to_arrange=None):
         widgets_selected = []
         widest = 0
         highest = 0
         x_coords = []
         y_coords = []
 
-        for widget in self.selectedItems():
+        if items_to_arrange is None:
+            items_to_arrange = self.selectedItems()
+
+        for widget in items_to_arrange:
             if isinstance(widget, DraggableProxyWidget):
                 widgets_selected.append(widget)
                 x = widget.scenePos().x()
@@ -1169,11 +1172,47 @@ class GraphView(QGraphicsView):
         pos = self.mapToScene(pos)
 
         widget = e.source()
+        mime_data = e.mimeData()
 
-        widget.remove()
-        self.scene.add_node(Node(widget.text, pos.x(), pos.y()))
+        if isinstance(widget, NodePaletteNodeWidget):
+            widget.remove()
+            self.scene.add_node(Node(widget.text, pos.x(), pos.y()))
+            e.accept()
+        elif mime_data.hasText():
+            text = mime_data.text()
+            lines = text.splitlines()
 
-        e.accept()
+            if self.paste_nodes_from_text(lines, pos):
+                e.acceptProposedAction()
+            else:
+                e.ignore()
+        else:
+            e.ignore()
+
+    def paste_nodes_from_text(self, lines, pos):
+        added_node_list = []
+
+        if len(lines) > MAX_DROP_LINES:
+            print('Warning! Trying to drop very long text!')
+            return False
+
+        for line in lines:
+            line = line.strip()
+
+            if not line:
+                continue
+
+            if len(line) > MAX_NODE_LABEL_CHARS:
+                print('Warning! Trying to drop node with very long name!')
+                continue
+
+            #print(line)
+            node = Node(line, pos.x(), pos.y())
+            self.scene.add_node(node)
+            added_node_list.append(node.widget.scene_widget)
+
+        self.scene.arrange_square(added_node_list)
+        return True
 
 
 class MainWindow(QMainWindow):
