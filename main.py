@@ -1,14 +1,14 @@
-from PyQt6.QtCore import Qt, QSize, pyqtSignal, QPointF, QLineF, QPoint, QMimeData, QRectF
-from PyQt6.QtGui import QPixmap, QPalette, QColor, QBrush, QPen, QPainter, QWheelEvent, QKeyEvent, QMouseEvent, QDrag, QIcon, QCursor, QTransform, QLinearGradient, QPainterPath
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QComboBox, QHBoxLayout, QScrollArea, QPushButton, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsRectItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QStackedLayout, QGridLayout, QLineEdit, QSizePolicy, QSpacerItem, QSplitter, QTabWidget, QColorDialog, QFileDialog, QDialog
+from PyQt6.QtCore import Qt, pyqtSignal, QPointF, QLineF, QPoint, QRectF
+from PyQt6.QtGui import QColor, QBrush, QPen, QPainter, QWheelEvent, QKeyEvent, QMouseEvent, QCursor, QTransform, QLinearGradient
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QSizePolicy, QTabWidget, QFileDialog, QDialog
 import sys
 import os
 import pandas as pd
 import numpy as np
 from constants import *
 from toolbar import Toolbar
-from style_palette_widget import StylePaletteWidget, ColorButton
-from node_palette_widget import NodePaletteWidget, NodePaletteNodeWidget 
+from style_palette_widget import StylePaletteWidget
+from node_palette_widget import NodePaletteWidget
 from status_bar import ModeWidget, NodeCounterWidget, ModeSelectionWidget
 from project_manager import OpenProjectDialog
 from node_list_widget import NodeListWidget
@@ -32,7 +32,6 @@ from selection_manager import SelectionManager
    * (we currently have a central list of all connection which we iterate over)
    * central DataFrame for vectorized filtering
    * nodes handle their own connections
- * buttons to switch modes via GUI
  * use proper shortcut handling of PyQt6
  * exception handling for cancelled file opening
    * might be obsolete with new "project manager"
@@ -48,6 +47,8 @@ from selection_manager import SelectionManager
    * upon deletion, there is a gap in the ID list
    * when saving and loading the graph, newly created nodes after loading get wrong IDs as the counter is too low
  * save and load stored selections
+ * identify redundant connections
+   * example: B and C depend on A. B depends on C. -> B depending on A is redundant because C already depends on A.
 
 DONE:
  * cut connections
@@ -58,6 +59,7 @@ DONE:
  * freeze/unfreeze selection
  * icons for modes
  * save/restore selection
+ * buttons to switch modes via GUI
 
 """
 
@@ -162,7 +164,7 @@ class QGraphApplication(QApplication):
             y = row.y
             node = Node(label, x, y)
             if node.id != id:
-                print(f're-mappig id: {id} -> {node.id}')
+                #print(f're-mappig id: {id} -> {node.id}')
                 self.node_id_map[id] = node.id
             #node.id = id
             #self.node_created.emit(node)
@@ -1218,10 +1220,10 @@ class MainWindow(QMainWindow):
 
         x_layout.addLayout(tool_bar_layout)
         x_layout.addWidget(self.view)
-        self.palette_tab_widget.addTab(self.node_palette, 'Node Palette')
-        self.palette_tab_widget.addTab(self.style_palette, 'Style Palette')
+        self.palette_tab_widget.addTab(self.node_palette, 'Palette')
+        self.palette_tab_widget.addTab(self.style_palette, 'Styles')
         self.palette_tab_widget.addTab(self.node_manager, 'Node Manager')
-        self.palette_tab_widget.addTab(self.selection_manager, 'Selection Manager')
+        self.palette_tab_widget.addTab(self.selection_manager, 'Selection')
         x_layout.addWidget(self.palette_tab_widget)
 
         y_layout.addLayout(x_layout)
@@ -1306,5 +1308,4 @@ if __name__ == '__main__':
     window = MainWindow()
     app.window = window
     window.show()
-
     app.exec()

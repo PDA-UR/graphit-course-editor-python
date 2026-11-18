@@ -20,8 +20,6 @@ class Toolbar(QVBoxLayout):
         button_open = QPushButton()
         button_open.setIcon(ICON_OPEN)
         button_open.setIconSize(SIZE_TOOLBAR_ICON)
-        #button_open.clicked.connect(lambda fn: self.app.load_graph(self.app.PATH_SAVE_NODES, self.app.PATH_SAVE_CONNECTIONS))
-        #button_open.clicked.connect(self.window.load_graph)
         button_open.clicked.connect(self.window.show_open_project_dialog)
         button_open.setToolTip('Open Graph')
         self.addWidget(button_open)
@@ -37,42 +35,6 @@ class Toolbar(QVBoxLayout):
         divider.setFrameShape(QFrame.Shape.HLine)
         divider.setFrameShadow(QFrame.Shadow.Sunken)
         self.addWidget(divider)
-        #self.addWidget(QSplitter())
-
-
-        """
-        ## Modes
-
-        ## TODO: Mode Switching Buttons
-        ## could also be in status bar?
-        ## should stay clicked as long as mode is active
-        button_selection_mode = QPushButton()
-        button_selection_mode.setIcon(ICON_PLACEHOLDER)
-        button_selection_mode.setIconSize(SIZE_TOOLBAR_ICON)
-        #button_selection_mode.clicked.connect(self.window.node_palette.selection_mode)
-        button_selection_mode.setToolTip('Enter Selection Mode')
-        self.addWidget(button_selection_mode)
-
-        button_connection_mode = QPushButton()
-        button_connection_mode.setIcon(ICON_PLACEHOLDER)
-        button_connection_mode.setIconSize(SIZE_TOOLBAR_ICON)
-        #button_connection_mode.clicked.connect(self.window.node_palette.connection_mode)
-        button_connection_mode.setToolTip('Enter Connection Mode')
-        self.addWidget(button_connection_mode)
-
-        button_cut_mode = QPushButton()
-        button_cut_mode.setIcon(ICON_PLACEHOLDER)
-        button_cut_mode.setIconSize(SIZE_TOOLBAR_ICON)
-        #button_cut_mode.clicked.connect(self.window.node_palette.cut_mode)
-        button_cut_mode.setToolTip('Enter Cut Mode')
-        self.addWidget(button_cut_mode)
-
-        divider = QFrame() 
-        divider.setFrameShape(QFrame.Shape.HLine)
-        divider.setFrameShadow(QFrame.Shadow.Sunken)
-        self.addWidget(divider)
-        """
-        
 
         ## Selection
 
@@ -96,22 +58,6 @@ class Toolbar(QVBoxLayout):
         button_select_parents.clicked.connect(self.scene.select_parents)
         button_select_parents.setToolTip('Select Parents')
         self.addWidget(button_select_parents)
-
-        """
-        button_grow_selection = QPushButton()
-        button_grow_selection.setIcon(ICON_SELECT_GROW)
-        button_grow_selection.setIconSize(SIZE_TOOLBAR_ICON)
-        button_grow_selection.clicked.connect(self.scene.grow_selection)
-        button_grow_selection.setToolTip('Grow Selection')
-        self.addWidget(button_grow_selection)
-
-        button_shrink_selection = QPushButton()
-        button_shrink_selection.setIcon(ICON_SELECT_SHRINK)
-        button_shrink_selection.setIconSize(SIZE_TOOLBAR_ICON)
-        button_shrink_selection.clicked.connect(self.scene.shrink_selection)
-        button_shrink_selection.setToolTip('Shrink Selection')
-        self.addWidget(button_shrink_selection)
-        """
 
         divider = QFrame() 
         divider.setFrameShape(QFrame.Shape.HLine)
@@ -180,7 +126,7 @@ class Toolbar(QVBoxLayout):
         self.addWidget(button_arrange_square)
 
         button_arrange_by_number_of_parents = QPushButton()
-        button_arrange_by_number_of_parents.setIcon(ICON_PLACEHOLDER)
+        button_arrange_by_number_of_parents.setIcon(ICON_ARRANGE_BY_PARENT_COUNT)
         button_arrange_by_number_of_parents.setIconSize(SIZE_TOOLBAR_ICON)
         button_arrange_by_number_of_parents.clicked.connect(self.scene.arrange_by_number_of_parents)
         button_arrange_by_number_of_parents.setToolTip('Arrange by Number of Parents')

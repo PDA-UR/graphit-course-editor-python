@@ -30,6 +30,7 @@ ICON_UNLOCK_NODES = QIcon('icons/unlock.svg')
 ICON_MODE_SELECTION = QIcon('icons/mode_selection.svg')
 ICON_MODE_CONNECTION = QIcon('icons/mode_connection.svg')
 ICON_MODE_CUT = QIcon('icons/mode_cut.svg')
+ICON_ARRANGE_BY_PARENT_COUNT = QIcon('icons/arrange_by_parent_count.svg')
 
 
 NODE_WIDGET_MAX_LABEL_WIDTH = 300
