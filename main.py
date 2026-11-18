@@ -3,6 +3,7 @@ from PyQt6.QtGui import QColor, QBrush, QPen, QPainter, QWheelEvent, QKeyEvent, 
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QSizePolicy, QTabWidget, QFileDialog, QDialog
 import sys
 import os
+import time
 import pandas as pd
 import numpy as np
 from constants import *
@@ -63,6 +64,10 @@ DONE:
 
 """
 
+# main application controller
+#  * stores nodes and connections
+#  * handles saving and loading the graph
+#  * knows the current interaction mode (selection, connection, cut)
 class QGraphApplication(QApplication):
     mode_changed = pyqtSignal()
     node_created = pyqtSignal()
@@ -88,14 +93,11 @@ class QGraphApplication(QApplication):
 
         self.window = None
 
-        self.cursor_pos = QPointF(0., 0.)
-
         self.project_name = ''
         self.project_path = ''
 
         # used for re-mapping node ids
         self.node_id_map = {}
-
 
     def connect_nodes(self, source, sink):
         if not self.connection_exists(source, sink):
@@ -202,9 +204,6 @@ class QGraphApplication(QApplication):
         self.load_connections(path_connections)
         self.node_created.emit()
 
-    def get_cursor_position(self):
-        return self.cursor_pos
-
     def load_topic_list(self):
         topics = []
         topics_path = self.PATH_LOAD_TOPICS
@@ -240,6 +239,7 @@ class QGraphApplication(QApplication):
         for connection in connections_to_cut:
             connection.delete()
 
+# model for an edge between two nodes
 class Connection():
     def __init__(self, source, sink):
         self.app = QApplication.instance()
@@ -277,6 +277,7 @@ class Connection():
     def __repr__(self):
         return f'{self.source.label} ({self.source.id}) --> {self.sink.label} ({self.sink.id})'
 
+# view for the connection model
 class ConnectionWidget(QGraphicsLineItem):
     LINE_GRADIENT_COLOR_SOURCE = QColor(100,100,100)
     LINE_GRADIENT_COLOR_SINK = QColor(200,200,200)
@@ -320,7 +321,7 @@ class ConnectionWidget(QGraphicsLineItem):
 
         super().paint(painter, option, widget)
         
-
+# model for a node in the graph
 class Node():
     id_counter = 0
     def __init__(self, label, x=0, y=0):
@@ -384,7 +385,7 @@ class Node():
     def __lt__(self, other):
         return self.id < other.id
 
-
+# view for the node model
 class NodeWidget(QFrame):
     MAX_LABEL_WIDTH = NODE_WIDGET_MAX_LABEL_WIDTH
     MAX_WIDGET_HEIGHT = NODE_WIDGET_MAX_WIDGET_HEIGHT
@@ -535,6 +536,9 @@ class NodeWidget(QFrame):
         self.frozen = False
         self.scene_widget.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, True)
 
+# our canvas is a QGraphicsScene, which can only include QGraphicsItems
+# therefore, we need a proxy widget to wrap our node widget
+# all events are passed to the actual node widget
 # from ChatGPT
 class DraggableProxyWidget(QGraphicsProxyWidget):
     def mousePressEvent(self, event):
@@ -580,6 +584,8 @@ class DraggableProxyWidget(QGraphicsProxyWidget):
         self.scene().removeItem(self)
         self.deleteLater()
 
+# model for the canvas
+# handles selection, as well as creating, arranging, and moving nodes
 class GraphScene(QGraphicsScene):
     GAP_SIZE = 2
     def __init__(self, window):
@@ -864,15 +870,19 @@ class GraphScene(QGraphicsScene):
         for node in self.app.nodes:
             node.widget.scene_widget.setSelected(True)
 
+    # TODO: not implemented
     def set_selection_mode_rect(self):
         self.selection_mode = self.app.SELECTION_MODE_RECT
 
+    # TODO: not implemented
     def set_selection_mode_lasso(self):
         self.selection_mode = self.app.SELECTION_MODE_LASSO
 
+    # TODO: not implemented
     def shrink_selection(self):
         pass
 
+    # TODO: not implemented
     def grow_selection(self):
         pass
 
@@ -926,7 +936,9 @@ class GraphScene(QGraphicsScene):
                 ## TODO magic number
                 widget.move(int(x), int(i * (150 + GraphScene.GAP_SIZE)))
 
-
+# view for the graphics scene (= canvas)
+# handles everything visual, as well as interaction e.g. drag/drop
+# can draw a foreground over the canvas
 # from ChatGPT
 class GraphView(QGraphicsView):
 
@@ -1030,7 +1042,6 @@ class GraphView(QGraphicsView):
                     node_pos = self.mapFromScene(node_scene_pos)
                     cursor_pos = self.mapFromGlobal(QCursor.pos())
                     painter.drawLine(node_pos, cursor_pos)
-                    #print(node_pos, cursor_pos)
         painter.end()
 
         super().paintEvent(event)
@@ -1136,8 +1147,6 @@ class GraphView(QGraphicsView):
             event.accept()
             return
 
-        QApplication.instance().cursor_pos = pos
-
         self.viewport().update()
 
         super().mouseMoveEvent(event)
@@ -1214,7 +1223,8 @@ class GraphView(QGraphicsView):
         self.scene.arrange_square(added_node_list)
         return True
 
-
+# main application window
+# builds GUI, handles key presses
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
