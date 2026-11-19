@@ -26,22 +26,22 @@ Nodes can be created, moved, arranged, and renamed, as well as connected with ea
 | Icon | Function | Shortcut | Description |
 | ---- | -------- | -------- | ----------- |
 | <img src="./icons/save.svg"> | Save Graph | Ctrl + S | Saves the graph to the "projects" directory. If the project name is not yet set, a project name can be entered via a popup prompt. |
-| <img src="./icons/open.svg"> | Ctrl + O | Open Graph | Shows a list of all projects in the project directory. Double clicking a list element opens the selected project. |
-| <img src="./icons/open_list.svg"> |  | Load Node List | Opens a node list file via a file browser. A node list file is a plain text file with one node name per line. The loaded nodes are stored in the node palette menu. |
-| <img src="./icons/select_all.svg"> | Ctrl + A | Select All | Selects all nodes in the graph. |
-| <img src="./icons/select_children_simple.svg"> |  | Select Children | Selects children of all selected nodes in the graph. |
-| <img src="./icons/select_parents_simple.svg"> |  | Select Parents | Selects parents of all selected nodes in the graph. |
-| <img src="./icons/delete.svg"> | del | Delete Nodes | Deletes all selected nodes. |
-| <img src="./icons/delete_connections.svg"> |  | Delete Connections | Deletes all connectios of all connected nodes. |
-| <img src="./icons/merge.svg"> |  | Merge Nodes | Merges all selected nodes into a single node. A name for the new node can be entered with a text input prompt. All connections of merged nodes are retained. |
-| <img src="./icons/lock.svg"> |  | Lock Selection | Selected nodes are locked so they can not be moved any more. |
-| <img src="./icons/unlock.svg"> |  | Unlock Selection | Selected nodes are unlocked. |
-| <img src="./icons/arrange_square.svg"> |  | Arrange in Square | Selected nodes are arranged in a square. Useful when loading a graph without position information. |
-| <img src="./icons/arrange_by_parent_count.svg"> |  | Arrange by Parent Count | Selected nodes are arranged vertically by their number of parents. Horizontally, they are distributed evenly. |
-| <img src="./icons/align_vertical.svg"> |  | Align Vertical | Selected nodes are aligned along a vertical line. |
-| <img src="./icons/align_horizontal.svg"> |  | Align Horizontal | Selected nodes are aligned along a horizontal line. |
-| <img src="./icons/distribute_horizontal.svg"> |  | Distribute Horizontal | Selected nodes are distributed evenly in horizontal direction. |
-| <img src="./icons/distribute_vertical.svg"> |  | Distribute Vertical | Selected nodes are distributed evenly in vertical direction. |
+| <img src="./icons/open.svg"> | Open Graph | Ctrl + O | Shows a list of all projects in the project directory. Double clicking a list element opens the selected project. |
+| <img src="./icons/open_list.svg"> | Load Node List |  | Opens a node list file via a file browser. A node list file is a plain text file with one node name per line. The loaded nodes are stored in the node palette menu. |
+| <img src="./icons/select_all.svg"> | Select All | Ctrl + A | Selects all nodes in the graph. |
+| <img src="./icons/select_children_simple.svg"> | Select Children |  | Selects children of all selected nodes in the graph. |
+| <img src="./icons/select_parents_simple.svg"> | Select Parents |  | Selects parents of all selected nodes in the graph. |
+| <img src="./icons/delete.svg"> | Delete Nodes |  | Deletes all selected nodes. |
+| <img src="./icons/delete_connections.svg"> | Delete Connections |  | Deletes all connectios of all connected nodes. |
+| <img src="./icons/merge.svg"> | Merge Nodes |  | Merges all selected nodes into a single node. A name for the new node can be entered with a text input prompt. All connections of merged nodes are retained. |
+| <img src="./icons/lock.svg"> | Lock Selection |  | Selected nodes are locked so they can not be moved any more. |
+| <img src="./icons/unlock.svg"> | Unlock Selection |  | Selected nodes are unlocked. |
+| <img src="./icons/arrange_square.svg"> | Arrange in Square |  | Selected nodes are arranged in a square. Useful when loading a graph without position information. |
+| <img src="./icons/arrange_by_parent_count.svg"> | Arrange by Parent Count |  | Selected nodes are arranged vertically by their number of parents. Horizontally, they are distributed evenly. |
+| <img src="./icons/align_vertical.svg"> | Align Vertical |  | Selected nodes are aligned along a vertical line. |
+| <img src="./icons/align_horizontal.svg"> | Align Horizontal |  | Selected nodes are aligned along a horizontal line. |
+| <img src="./icons/distribute_horizontal.svg"> | Distribute Horizontal |  | Selected nodes are distributed evenly in horizontal direction. |
+| <img src="./icons/distribute_vertical.svg"> | Distribute Vertical |  | Selected nodes are distributed evenly in vertical direction. |
 
 ### Side Bar
 
