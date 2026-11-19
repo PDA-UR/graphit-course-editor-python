@@ -15,55 +15,6 @@ from project_manager import OpenProjectDialog
 from node_list_widget import NodeListWidget
 from selection_manager import SelectionManager
 
-""" TODO
-
- * identify satellites
- * move node with single connection to parent
- * select all connected nodes with single connection
- * "arrange as subgraph"
- * groups: create, select, freeze, unfreeze
- * proper localization
- * dedicated config file
- * project files
- * modifier + click to select subgraph
- * snap to grid
- * in case of performance issues: use more efficient way to handle connections
-   * (we currently have a central list of all connection which we iterate over)
-   * central DataFrame for vectorized filtering
-   * nodes handle their own connections
- * use proper shortcut handling of PyQt6
- * exception handling for cancelled file opening
-   * might be obsolete with new "project manager"
- * distribute code to more files
- * lasso selection
-   * should be very similar to cut mode?
- * constant naming for lock/freeze feature
- * "Meta Nodes"
-   * for things like "belongs to course session"
-   * should be able to hide connections
- * proper ID management when nodes get deleted
-   * node IDs are assigned in the constructor and incremented
-   * upon deletion, there is a gap in the ID list
-   * when saving and loading the graph, newly created nodes after loading get wrong IDs as the counter is too low
- * save and load stored selections
- * identify redundant connections
-   * example: B and C depend on A. B depends on C. -> B depending on A is redundant because C already depends on A.
-
-DONE:
- * cut connections
- * highlight connections of selected node
- * connection as color gradient to identify source/sink?
- * show number of nodes/selected nodes in status bar
- * [bug] check file name creation in save function
- * freeze/unfreeze selection
- * icons for modes
- * save/restore selection
- * buttons to switch modes via GUI
- * drag/drop (or paste) text directly as nodes
-   * warning if long text is pasted
-
-"""
-
 # main application controller
 #  * stores nodes and connections
 #  * handles saving and loading the graph
