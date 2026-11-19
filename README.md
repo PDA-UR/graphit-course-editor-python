@@ -31,7 +31,7 @@ Nodes can be created, moved, arranged, and renamed, as well as connected with ea
 | <img src="./icons/select_all.svg"> | Select All | Ctrl + A | Selects all nodes in the graph. |
 | <img src="./icons/select_children_simple.svg"> | Select Children |  | Selects children of all selected nodes in the graph. |
 | <img src="./icons/select_parents_simple.svg"> | Select Parents |  | Selects parents of all selected nodes in the graph. |
-| <img src="./icons/delete.svg"> | Delete Nodes |  | Deletes all selected nodes. |
+| <img src="./icons/delete.svg"> | Delete Nodes | del | Deletes all selected nodes. |
 | <img src="./icons/delete_connections.svg"> | Delete Connections |  | Deletes all connectios of all connected nodes. |
 | <img src="./icons/merge.svg"> | Merge Nodes |  | Merges all selected nodes into a single node. A name for the new node can be entered with a text input prompt. All connections of merged nodes are retained. |
 | <img src="./icons/lock.svg"> | Lock Selection |  | Selected nodes are locked so they can not be moved any more. |
