@@ -1,4 +1,4 @@
-# GraphIT Course Creator
+# GraphIT Course Editor
 
 
 ## GUI
@@ -29,18 +29,12 @@
 
 ### Side Bar
 
-**Node Palette**
-
+| **Node Palette** |  |
+| --- | --- |
 | <img src="./docs/images/node_palette.png"> | List of nodes that can be dragged into the canvas. The node list can be loaded with the "Load Node List" button. A node list is a plain text file with one node name per line. |
-
-**Style Palette**
-
+| **Style Palette** |  |
 | <img src="./docs/images/style_palette.png"> | Color palette that can be used to assign colors to nodes. There is a small standard palette, but custom colors can be added with the corresponding button. |
-
-**Node Manager**
-
+| **Node Manager** |  |
 | <img src="./docs/images/node_manager.png"> | Tabular overview of all nodes in the graph. Displays the number of children and parents for each node. Double clicking a list entry focuses the viewport on the corresponding node. Can be useful to identify unconnected nodes (nodes without children and parents). |
-
-**Selection Manager**
-
+| **Selection Manager** |  |
 | <img src="./docs/images/selection_manager.png"> | Clicking the "Store Selection" button allows for saving and later restorig the current node selection. Selections are named via a text input prompt. Double clicking a list item restores the corresponding selection. Useful to quickly select sub-graphs. |
