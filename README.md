@@ -21,7 +21,7 @@ Nodes can be created, moved, arranged, and renamed, as well as connected with ea
 
 <img src="./docs/images/overview.png">
 
-### Toolbar
+### Tool Bar
 
 | Icon | Function | Shortcut | Description |
 | ---- | -------- | -------- | ----------- |
@@ -55,6 +55,19 @@ Nodes can be created, moved, arranged, and renamed, as well as connected with ea
 | **Selection Manager** |  |
 | <img src="./docs/images/selection_manager.png"> | Clicking the "Store Selection" button allows for saving and later restorig the current node selection. Selections are named via a text input prompt. Double clicking a list item restores the corresponding selection. Useful to quickly select sub-graphs. |
 
+### Status Bar
+
+<img src="./docs/images/status_bar.png">
+
+The status bar on the bottom displays information on the current application state.
+On the left hand side, the current interaction mode (selection, connection, cut) is displayed and can also be switched via the three toggle buttons (see below).
+On the right hand side, information about the total number of nodes in the graph, as well as the number of selected nodes is displayed.
+
+| Icon | Function | Shortcut | Description |
+| ---- | -------- | -------- | ----------- |
+| <img src="./icons/mode_selection.svg"> | Selection Mode | S | In selection mode, nodes can be selected and moved without triggering other functionality. |
+| <img src="./icons/mode_connection.svg"> | Connection Mode | C | In connection mode, connections between nodes can be created by first selecting the parent (source) node and then clicking on the child (sink) node. After clicking on the parent node, a dashed line indicates where the connection will goIn connection mode, connections between nodes can be created by first selecting the parent (source) node and then clicking on the child (sink) node. After clicking on the parent node, a dashed line indicates where the connection will go.. |
+| <img src="./icons/mode_cut.svg"> | Cut Mode | X | In cut mode, connections can be deleted by cutting them with a mouse stroke. |
 
 ## Project File Structure
 
