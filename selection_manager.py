@@ -49,7 +49,7 @@ class SelectionManager(QWidget):
     def update_selection_list(self):
         pass
 
-    def store_selection(self, selection_name=''):
+    def store_selection(self, selection_name='', selection=[]):
         print(selection_name)
         if not selection_name or selection_name == '':
             selection_name = self.show_text_input_dialog()
@@ -57,7 +57,10 @@ class SelectionManager(QWidget):
         if selection_name == '':
             return
 
-        self.selection_dict[selection_name] = self.scene.get_selection()
+        if len(selection) == 0:
+            selection = self.scene.get_selection()
+
+        self.selection_dict[selection_name] = selection
         self.selection_list.addItem(selection_name)
 
     def load_selection(self, selection_name):

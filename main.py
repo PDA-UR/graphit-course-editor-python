@@ -1220,6 +1220,7 @@ class GraphView(QGraphicsView):
             self.scene.add_node(node)
             added_node_list.append(node.widget.scene_widget)
 
+        self.app.window.selection_manager.store_selection('Pasted Nodes', added_node_list)
         self.scene.arrange_square(added_node_list)
         return True
 
