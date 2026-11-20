@@ -25,23 +25,23 @@ Nodes can be created, moved, arranged, and renamed, as well as connected with ea
 
 | Icon | Function | Shortcut | Description |
 | ---- | -------- | -------- | ----------- |
-| <img src="./icons/save.svg"> | Save Graph | Ctrl + S | Saves the graph to the "projects" directory. If the project name is not yet set, a project name can be entered via a popup prompt. |
-| <img src="./icons/open.svg"> | Open Graph | Ctrl + O | Shows a list of all projects in the project directory. Double clicking a list element opens the selected project. |
-| <img src="./icons/open_list.svg"> | Load Node List |  | Opens a node list file via a file browser. A node list file is a plain text file with one node name per line. The loaded nodes are stored in the node palette menu. |
-| <img src="./icons/select_all.svg"> | Select All | Ctrl + A | Selects all nodes in the graph. |
-| <img src="./icons/select_children_simple.svg"> | Select Children |  | Selects children of all selected nodes in the graph. |
-| <img src="./icons/select_parents_simple.svg"> | Select Parents |  | Selects parents of all selected nodes in the graph. |
-| <img src="./icons/delete.svg"> | Delete Nodes | del | Deletes all selected nodes. |
-| <img src="./icons/delete_connections.svg"> | Delete Connections |  | Deletes all connectios of all connected nodes. |
-| <img src="./icons/merge.svg"> | Merge Nodes |  | Merges all selected nodes into a single node. A name for the new node can be entered with a text input prompt. All connections of merged nodes are retained. |
-| <img src="./icons/lock.svg"> | Lock Selection |  | Selected nodes are locked so they can not be moved any more. |
-| <img src="./icons/unlock.svg"> | Unlock Selection |  | Selected nodes are unlocked. |
-| <img src="./icons/arrange_square.svg"> | Arrange in Square |  | Selected nodes are arranged in a square. Useful when loading a graph without position information. |
-| <img src="./icons/arrange_by_parent_count.svg"> | Arrange by Parent Count |  | Selected nodes are arranged vertically by their number of parents. Horizontally, they are distributed evenly. |
-| <img src="./icons/align_vertical.svg"> | Align Vertical |  | Selected nodes are aligned along a vertical line. |
-| <img src="./icons/align_horizontal.svg"> | Align Horizontal |  | Selected nodes are aligned along a horizontal line. |
-| <img src="./icons/distribute_horizontal.svg"> | Distribute Horizontal |  | Selected nodes are distributed evenly in horizontal direction. |
-| <img src="./icons/distribute_vertical.svg"> | Distribute Vertical |  | Selected nodes are distributed evenly in vertical direction. |
+| <img src="./docs/icons/save.png"> | Save Graph | Ctrl + S | Saves the graph to the "projects" directory. If the project name is not yet set, a project name can be entered via a popup prompt. |
+| <img src="./docs/icons/open.png"> | Open Graph | Ctrl + O | Shows a list of all projects in the project directory. Double clicking a list element opens the selected project. |
+| <img src="./docs/icons/open_list.png"> | Load Node List |  | Opens a node list file via a file browser. A node list file is a plain text file with one node name per line. The loaded nodes are stored in the node palette menu. |
+| <img src="./docs/icons/select_all.png"> | Select All | Ctrl + A | Selects all nodes in the graph. |
+| <img src="./docs/icons/select_children_simple.png"> | Select Children |  | Selects children of all selected nodes in the graph. |
+| <img src="./docs/icons/select_parents_simple.png"> | Select Parents |  | Selects parents of all selected nodes in the graph. |
+| <img src="./docs/icons/delete.png"> | Delete Nodes | del | Deletes all selected nodes. |
+| <img src="./docs/icons/delete_connections.png"> | Delete Connections |  | Deletes all connectios of all connected nodes. |
+| <img src="./docs/icons/merge.png"> | Merge Nodes |  | Merges all selected nodes into a single node. A name for the new node can be entered with a text input prompt. All connections of merged nodes are retained. |
+| <img src="./docs/icons/lock.png"> | Lock Selection |  | Selected nodes are locked so they can not be moved any more. |
+| <img src="./docs/icons/unlock.png"> | Unlock Selection |  | Selected nodes are unlocked. |
+| <img src="./docs/icons/arrange_square.png"> | Arrange in Square |  | Selected nodes are arranged in a square. Useful when loading a graph without position information. |
+| <img src="./docs/icons/arrange_by_parent_count.png"> | Arrange by Parent Count |  | Selected nodes are arranged vertically by their number of parents. Horizontally, they are distributed evenly. |
+| <img src="./docs/icons/align_vertical.png"> | Align Vertical |  | Selected nodes are aligned along a vertical line. |
+| <img src="./docs/icons/align_horizontal.png"> | Align Horizontal |  | Selected nodes are aligned along a horizontal line. |
+| <img src="./docs/icons/distribute_horizontal.png"> | Distribute Horizontal |  | Selected nodes are distributed evenly in horizontal direction. |
+| <img src="./docs/icons/distribute_vertical.png"> | Distribute Vertical |  | Selected nodes are distributed evenly in vertical direction. |
 
 ### Side Bar
 
@@ -65,9 +65,9 @@ On the right hand side, information about the total number of nodes in the graph
 
 | Icon | Function | Shortcut | Description |
 | ---- | -------- | -------- | ----------- |
-| <img src="./icons/mode_selection.svg"> | Selection Mode | S | In selection mode, nodes can be selected and moved without triggering other functionality. |
-| <img src="./icons/mode_connection.svg"> | Connection Mode | C | In connection mode, connections between nodes can be created by first selecting the parent (source) node and then clicking on the child (sink) node. After clicking on the parent node, a dashed line indicates where the connection will goIn connection mode, connections between nodes can be created by first selecting the parent (source) node and then clicking on the child (sink) node. After clicking on the parent node, a dashed line indicates where the connection will go.. |
-| <img src="./icons/mode_cut.svg"> | Cut Mode | X | In cut mode, connections can be deleted by cutting them with a mouse stroke. |
+| <img src="./docs/icons/mode_selection.png"> | Selection Mode | S | In selection mode, nodes can be selected and moved without triggering other functionality. |
+| <img src="./docs/icons/mode_connection.png"> | Connection Mode | C | In connection mode, connections between nodes can be created by first selecting the parent (source) node and then clicking on the child (sink) node. After clicking on the parent node, a dashed line indicates where the connection will goIn connection mode, connections between nodes can be created by first selecting the parent (source) node and then clicking on the child (sink) node. After clicking on the parent node, a dashed line indicates where the connection will go.. |
+| <img src="./docs/icons/mode_cut.png"> | Cut Mode | X | In cut mode, connections can be deleted by cutting them with a mouse stroke. |
 
 ## Project File Structure
 
