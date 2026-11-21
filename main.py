@@ -328,6 +328,7 @@ class Node():
             connection.delete()
 
     def delete(self):
+        #if not self.widget.frozen:
         self.delete_connections()
         self.app.nodes.remove(self)
         self.widget.delete()
@@ -574,12 +575,14 @@ class GraphScene(QGraphicsScene):
     def delete_connections(self):
         widgets_selected = self.selectedItems()
         for scene_widget in widgets_selected:
-            scene_widget.widget().node.delete_connections()
+            if not scene_widget.widget().frozen:
+                scene_widget.widget().node.delete_connections()
 
     def delete_selection(self):
         widgets_selected = self.selectedItems()
         for scene_widget in widgets_selected:
-            scene_widget.widget().node.delete()
+            if not scene_widget.widget().frozen:
+                scene_widget.widget().node.delete()
 
     def get_selection(self):
         result = []
