@@ -287,6 +287,10 @@ class Node():
         self.color = '#636d83'
         self.app.node_created.emit()
 
+    def set_name(self, name):
+        self.label = name
+        self.widget.rename(name)
+
     def set_color(self, color_code):
         self.color = color_code
         self.widget.set_color(color_code)
@@ -385,6 +389,10 @@ class NodeWidget(QFrame):
         self.current_color = NodeWidget.COLOR_NORMAL
 
         self.frozen = False
+
+    def rename(self, name):
+        self.label.setText(name)
+        self.adjustSize()
 
     def set_color(self, color_code):
         # TODO: make label text color white if background color is too dark
