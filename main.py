@@ -363,6 +363,7 @@ class NodeWidget(QFrame):
 
         self.layout = QVBoxLayout()
         self.label = QLabel(node.label)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignHCenter)
         self.label.setWordWrap(True)
         self.label.setMaximumWidth(NodeWidget.MAX_LABEL_WIDTH)
         self.setMaximumHeight(NodeWidget.MAX_WIDGET_HEIGHT)
