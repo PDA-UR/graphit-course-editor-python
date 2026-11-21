@@ -37,27 +37,52 @@ class ModeSelectionWidget(QWidget):
         self.layout.addWidget(self.btn_cut_mode)
         self.setLayout(self.layout)
         self.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Maximum)
+        self.app.mode_changed.connect(self.modeChangedEvent)
 
     def selection_mode_button_clicked(self):
         self.btn_selection_mode.setChecked(True)
         self.btn_connection_mode.setChecked(False)
         self.btn_cut_mode.setChecked(False)
         self.app.MODE = self.app.MODE_SELECTION
+
+        # hacky, but we want no callback loops
+        self.app.mode_changed.disconnect(self.modeChangedEvent)
         self.app.mode_changed.emit()
+        self.app.mode_changed.connect(self.modeChangedEvent)
 
     def connection_mode_button_clicked(self):
         self.btn_selection_mode.setChecked(False)
         self.btn_connection_mode.setChecked(True)
         self.btn_cut_mode.setChecked(False)
         self.app.MODE = self.app.MODE_CONNECTION
+
+        self.app.mode_changed.disconnect(self.modeChangedEvent)
         self.app.mode_changed.emit()
+        self.app.mode_changed.connect(self.modeChangedEvent)
 
     def cut_mode_button_clicked(self):
         self.btn_selection_mode.setChecked(False)
         self.btn_connection_mode.setChecked(False)
         self.btn_cut_mode.setChecked(True)
         self.app.MODE = self.app.MODE_CUT
+
+        self.app.mode_changed.disconnect(self.modeChangedEvent)
         self.app.mode_changed.emit()
+        self.app.mode_changed.connect(self.modeChangedEvent)
+
+    def modeChangedEvent(self):
+        if self.app.MODE == self.app.MODE_SELECTION:
+            self.btn_selection_mode.setChecked(True)
+            self.btn_connection_mode.setChecked(False)
+            self.btn_cut_mode.setChecked(False)
+        elif self.app.MODE == self.app.MODE_CONNECTION:
+            self.btn_selection_mode.setChecked(False)
+            self.btn_connection_mode.setChecked(True)
+            self.btn_cut_mode.setChecked(False)
+        elif self.app.MODE == self.app.MODE_CUT:
+            self.btn_selection_mode.setChecked(False)
+            self.btn_connection_mode.setChecked(False)
+            self.btn_cut_mode.setChecked(True)
 
 class ModeWidget(QLabel):
     def __init__(self):
@@ -66,8 +91,6 @@ class ModeWidget(QLabel):
         self.setText(f'Mode: {self.app.MODE}')
         self.app.mode_changed.connect(self.modeChangedEvent)
         #self.scene = window.scene
-
-
 
     def modeChangedEvent(self):
         self.setText(f'Mode: {self.app.MODE}')
