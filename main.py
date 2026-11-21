@@ -159,7 +159,7 @@ class QGraphApplication(QApplication):
         topics = []
         topics_path = self.PATH_LOAD_TOPICS
         topics_path = self.window.show_open_file_dialog('Open Node List')
-        with open(topics_path, 'r') as f:
+        with open(topics_path, 'r', encoding='utf-8') as f:
             for line in f.readlines():
                 topics.append(line.strip())
         return topics
