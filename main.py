@@ -11,7 +11,7 @@ from toolbar import Toolbar
 from style_palette_widget import StylePaletteWidget
 from node_palette_widget import NodePaletteWidget, NodePaletteNodeWidget
 from status_bar import ModeWidget, NodeCounterWidget, ModeSelectionWidget
-from project_manager import OpenProjectDialog
+from list_dialog import ListDialog
 from node_list_widget import NodeListWidget
 from selection_manager import SelectionManager
 
@@ -798,18 +798,23 @@ class GraphScene(QGraphicsScene):
 
     ## TODO: handle colors (first selected? majority?)
     def merge_nodes(self):
-        new_node_label = self.window.show_label_input_dialog()
-
         widgets_selected = self.selectedItems()
 
         all_x = []
         all_y = []
+        all_labels = []
         for scene_widget in widgets_selected:
             all_x.append(scene_widget.pos().x())
             all_y.append(scene_widget.pos().y())
+            all_labels.append(scene_widget.widget().node.label)
 
         x = int(np.mean(all_x))
         y = int(np.mean(all_y))
+
+        new_node_label = self.window.show_merge_input_dialog(all_labels)
+
+        if new_node_label == False:
+            return
 
         node = Node(new_node_label, x, y)
         self.add_node(node)
@@ -1286,6 +1291,15 @@ class MainWindow(QMainWindow):
         else:
             return ''
     
+    def show_merge_input_dialog(self, label_list=[]):
+        if len(label_list) > 0:
+            dialog = ListDialog(label_list, 'Select Label', self)
+
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                selected_label = dialog.selected_text
+                return selected_label
+        return False
+
     def show_open_project_dialog(self):
         project_list = []
         if not os.path.exists(PROJECTS_PATH):
@@ -1301,10 +1315,10 @@ class MainWindow(QMainWindow):
                 project_list.append(project_dir)
 
         if len(project_list) > 0:
-            dialog = OpenProjectDialog(project_list, self)
+            dialog = ListDialog(project_list, 'Open Project', self)
 
             if dialog.exec() == QDialog.DialogCode.Accepted:
-                selected_project = dialog.selected_project
+                selected_project = dialog.selected_text
                 self.app.project_name = selected_project
                 self.app.project_path = f'{PROJECTS_PATH}/{selected_project}'
                 self.app.load_nodes(f'{PROJECTS_PATH}/{selected_project}/{selected_project}_nodes.csv')
