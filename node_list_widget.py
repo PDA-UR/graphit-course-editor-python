@@ -1,3 +1,4 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QGridLayout, QColorDialog, QPushButton, QVBoxLayout, QTableWidget, QTableWidgetItem, QLineEdit, QTableView, QHeaderView, QCheckBox, QInputDialog, QMenu
 from PyQt6.QtCore import Qt, QSortFilterProxyModel
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
@@ -191,7 +192,8 @@ class NodeListWidget(QWidget):
         ).data(Qt.ItemDataRole.UserRole)
 
         if node is not None:
-            self.view.centerOn(node.widget.scene_widget)
+            #self.view.centerOn(node.widget.scene_widget)
+            self.view.set_view_to_nodes([node.widget.scene_widget])
 
 # from ChatGPT
 class NodeFilterModel(QSortFilterProxyModel):

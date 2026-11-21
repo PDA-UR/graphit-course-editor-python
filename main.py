@@ -597,6 +597,14 @@ class GraphScene(QGraphicsScene):
         for item in self.selectedItems():
             result.append(item)
         return result
+    
+    def get_scene_bounding_box(self, scene_widgets=[]):
+        bounding_box = QRectF(0, 0, 0, 0)
+
+        for scene_widget in scene_widgets:
+             bounding_box = bounding_box.united(scene_widget.sceneBoundingRect())
+
+        return bounding_box
 
     def mouseDoubleClickEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
@@ -1201,6 +1209,42 @@ class GraphView(QGraphicsView):
         self.app.window.selection_manager.store_selection('Pasted Nodes', added_node_list)
         self.scene.arrange_square(added_node_list)
         return True
+
+    def set_view_to_selection(self):
+        self.set_view_to_nodes(self.scene.get_selection())
+
+    def set_view_to_graph(self):
+        scene_widgets = []
+
+        for node in self.app.nodes:
+            scene_widgets.append(node.widget.scene_widget)
+        self.set_view_to_nodes(scene_widgets)
+
+    def set_view_to_nodes(self, scene_widgets):
+        bounding_box = self.scene.get_scene_bounding_box(scene_widgets)
+
+        # ensure minimum size
+        center = bounding_box.center()
+
+        width = max(bounding_box.width(), VIEW_BOUNDING_BOX_MIN_WIDTH)
+        height = max(bounding_box.height(), VIEW_BOUNDING_BOX_MIN_HEIGHT)
+
+        bounding_box = QRectF(
+            center.x() - width / 2,
+            center.y() - height / 2,
+            width,
+            height
+        )
+
+        # add padding
+        padding = bounding_box.width() * VIEW_BOUNDING_BOX_PADDING
+        bounding_box = bounding_box.adjusted(
+            -padding, -padding,
+             padding,  padding
+        )
+
+        self.fitInView(bounding_box, Qt.AspectRatioMode.KeepAspectRatio)
+        self.update()
 
 # main application window
 # builds GUI, handles key presses
