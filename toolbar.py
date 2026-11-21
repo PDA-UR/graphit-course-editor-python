@@ -42,7 +42,7 @@ class Toolbar(QVBoxLayout):
         button_select_all.setIcon(ICON_SELECT_ALL)
         button_select_all.setIconSize(SIZE_TOOLBAR_ICON)
         button_select_all.clicked.connect(self.scene.select_all)
-        button_select_all.setToolTip('Load Node Palette List')
+        button_select_all.setToolTip('Select All')
         self.addWidget(button_select_all)
 
         button_select_children = QPushButton()
