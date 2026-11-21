@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QGridLayout, QColorDialog, QPushButton, QVBoxLayout, QTableWidget, QTableWidgetItem, QLineEdit, QTableView, QHeaderView, QCheckBox
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QGridLayout, QColorDialog, QPushButton, QVBoxLayout, QTableWidget, QTableWidgetItem, QLineEdit, QTableView, QHeaderView, QCheckBox, QInputDialog, QMenu
 from PyQt6.QtCore import Qt, QSortFilterProxyModel
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
 from constants import *
@@ -48,6 +48,12 @@ class NodeListWidget(QWidget):
         )
         self.table.setEditTriggers(
             QTableView.EditTrigger.NoEditTriggers
+        )
+        self.table.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.CustomContextMenu
+        )
+        self.table.customContextMenuRequested.connect(
+            self.showContextMenu
         )
 
         header = self.table.horizontalHeader()
@@ -99,9 +105,8 @@ class NodeListWidget(QWidget):
             child_item = QStandardItem(str(child_count))
 
             # Store the actual node object on the first item
-            name_item.setData(
-                node, Qt.ItemDataRole.UserRole
-            )
+            name_item.setData(node, Qt.ItemDataRole.UserRole)
+            name_item.setToolTip(str(node.label))
 
             # Right-align numeric columns
             parent_item.setTextAlignment(
@@ -116,6 +121,67 @@ class NodeListWidget(QWidget):
                 parent_item,
                 child_item
             ])
+
+    # from ChatGPT
+    def showContextMenu(self, pos):
+        index = self.table.indexAt(pos)
+
+        if not index.isValid():
+            return
+
+        self.table.selectRow(index.row())
+
+        menu = QMenu(self)
+
+        rename_action = menu.addAction("Rename")
+
+        action = menu.exec(
+            self.table.viewport().mapToGlobal(pos)
+        )
+
+        if action == rename_action:
+            self.renameNode(index)
+
+    # from ChatGPT
+    def renameNode(self, proxy_index):
+        # Map proxy index to source model
+        source_index = self.proxy_model.mapToSource(proxy_index)
+
+        # Always retrieve the node from column 0
+        node_index = self.model.index(source_index.row(), 0)
+
+        node = node_index.data(Qt.ItemDataRole.UserRole)
+
+        if node is None:
+            return
+
+        new_name, accepted = QInputDialog.getText(
+            self,
+            "Rename Node",
+            "New Label:",
+            text=node.label
+        )
+
+        if not accepted:
+            return
+
+        new_name = new_name.strip()
+
+        if not new_name:
+            return
+
+        # Update the actual node
+        #node.label = new_name
+        node.set_name(new_name)
+
+        # Update the model
+        self.model.setData(
+            node_index,
+            new_name,
+            Qt.ItemDataRole.DisplayRole
+        )
+
+        #node.widget.node.set_name(new_name)
 
     def onDoubleClick(self, proxy_index):
         source_index = self.proxy_model.mapToSource(proxy_index)

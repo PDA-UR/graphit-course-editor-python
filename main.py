@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, pyqtSignal, QPointF, QLineF, QPoint, QRectF
 from PyQt6.QtGui import QColor, QBrush, QPen, QPainter, QWheelEvent, QKeyEvent, QMouseEvent, QCursor, QTransform, QLinearGradient
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QSizePolicy, QTabWidget, QFileDialog, QDialog
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QSizePolicy, QTabWidget, QFileDialog, QDialog, QSplitter
 import sys
 import os
 import time
@@ -11,7 +11,7 @@ from toolbar import Toolbar
 from style_palette_widget import StylePaletteWidget
 from node_palette_widget import NodePaletteWidget, NodePaletteNodeWidget
 from status_bar import ModeWidget, NodeCounterWidget, ModeSelectionWidget
-from project_manager import OpenProjectDialog
+from list_dialog import ListDialog
 from node_list_widget import NodeListWidget
 from selection_manager import SelectionManager
 
@@ -287,6 +287,10 @@ class Node():
         self.color = '#636d83'
         self.app.node_created.emit()
 
+    def set_name(self, name):
+        self.label = name
+        self.widget.rename(name)
+
     def set_color(self, color_code):
         self.color = color_code
         self.widget.set_color(color_code)
@@ -328,6 +332,7 @@ class Node():
             connection.delete()
 
     def delete(self):
+        #if not self.widget.frozen:
         self.delete_connections()
         self.app.nodes.remove(self)
         self.widget.delete()
@@ -363,6 +368,7 @@ class NodeWidget(QFrame):
 
         self.layout = QVBoxLayout()
         self.label = QLabel(node.label)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignHCenter)
         self.label.setWordWrap(True)
         self.label.setMaximumWidth(NodeWidget.MAX_LABEL_WIDTH)
         self.setMaximumHeight(NodeWidget.MAX_WIDGET_HEIGHT)
@@ -383,6 +389,10 @@ class NodeWidget(QFrame):
         self.current_color = NodeWidget.COLOR_NORMAL
 
         self.frozen = False
+
+    def rename(self, name):
+        self.label.setText(name)
+        self.adjustSize()
 
     def set_color(self, color_code):
         # TODO: make label text color white if background color is too dark
@@ -573,12 +583,14 @@ class GraphScene(QGraphicsScene):
     def delete_connections(self):
         widgets_selected = self.selectedItems()
         for scene_widget in widgets_selected:
-            scene_widget.widget().node.delete_connections()
+            if not scene_widget.widget().frozen:
+                scene_widget.widget().node.delete_connections()
 
     def delete_selection(self):
         widgets_selected = self.selectedItems()
         for scene_widget in widgets_selected:
-            scene_widget.widget().node.delete()
+            if not scene_widget.widget().frozen:
+                scene_widget.widget().node.delete()
 
     def get_selection(self):
         result = []
@@ -655,7 +667,7 @@ class GraphScene(QGraphicsScene):
         x_coords = []
         y_coords = []
 
-        if items_to_arrange is None:
+        if items_to_arrange is None or items_to_arrange is False:
             items_to_arrange = self.selectedItems()
 
         for widget in items_to_arrange:
@@ -786,18 +798,23 @@ class GraphScene(QGraphicsScene):
 
     ## TODO: handle colors (first selected? majority?)
     def merge_nodes(self):
-        new_node_label = self.window.show_label_input_dialog()
-
         widgets_selected = self.selectedItems()
 
         all_x = []
         all_y = []
+        all_labels = []
         for scene_widget in widgets_selected:
             all_x.append(scene_widget.pos().x())
             all_y.append(scene_widget.pos().y())
+            all_labels.append(scene_widget.widget().node.label)
 
         x = int(np.mean(all_x))
         y = int(np.mean(all_y))
+
+        new_node_label = self.window.show_merge_input_dialog(all_labels)
+
+        if new_node_label == False:
+            return
 
         node = Node(new_node_label, x, y)
         self.add_node(node)
@@ -934,6 +951,16 @@ class GraphView(QGraphicsView):
 
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setInteractive(True)
+
+        ## TODO: Magic Numbers
+        self.setMinimumSize(200, 200)
+        #self.setMaximumSize(1500, 1000)
+
+        self.setSizePolicy(
+            QSizePolicy.Policy.Ignored,
+            QSizePolicy.Policy.Ignored
+        )
+        self.adjustSize()
 
     def mode_changed(self):
         if self.app.MODE == self.app.MODE_SELECTION:
@@ -1184,6 +1211,9 @@ class MainWindow(QMainWindow):
         self.app: QGraphApplication = QApplication.instance()
         self.selection_mode = app.SELECTION_MODE_RECT
 
+        #self.setWindowState(Qt.WindowState.WindowMaximized)
+        self.showMaximized()
+
         self.setWindowTitle(f'Course Graph Creator')
 
         y_layout = QVBoxLayout()
@@ -1194,11 +1224,30 @@ class MainWindow(QMainWindow):
         self.view.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
 
         self.palette_tab_widget = QTabWidget()
+
+        ## TODO: Magic Numbers
+        self.palette_tab_widget.setMinimumWidth(250)
+        self.palette_tab_widget.setMaximumWidth(550)
+        self.palette_tab_widget.setSizePolicy(
+            QSizePolicy.Policy.Preferred,
+            QSizePolicy.Policy.Expanding
+        )
+
         self.node_palette = NodePaletteWidget()
         self.style_palette = StylePaletteWidget()
         self.node_manager = NodeListWidget(self.view)
         self.selection_manager = SelectionManager(self)
         tool_bar_layout = Toolbar(self)
+
+        ## splitter between cavnvas and side bar
+
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+        splitter.addWidget(self.view)
+        splitter.addWidget(self.palette_tab_widget)
+        splitter.setChildrenCollapsible(False)
+        splitter.setStretchFactor(0, 1)
+        splitter.setStretchFactor(1, 0)
+        splitter.setSizes([800, 300]) ## TODO: Magic Numbers?
 
         ## status bar
 
@@ -1220,12 +1269,13 @@ class MainWindow(QMainWindow):
         ## build final layout
 
         x_layout.addLayout(tool_bar_layout)
-        x_layout.addWidget(self.view)
+        #x_layout.addWidget(self.view)
         self.palette_tab_widget.addTab(self.node_palette, 'Palette')
         self.palette_tab_widget.addTab(self.style_palette, 'Styles')
         self.palette_tab_widget.addTab(self.node_manager, 'Node Manager')
         self.palette_tab_widget.addTab(self.selection_manager, 'Selection')
-        x_layout.addWidget(self.palette_tab_widget)
+        x_layout.addWidget(splitter)
+        #x_layout.addWidget(self.palette_tab_widget)
 
         y_layout.addLayout(x_layout)
         y_layout.addLayout(status_bar_layout)
@@ -1241,6 +1291,15 @@ class MainWindow(QMainWindow):
         else:
             return ''
     
+    def show_merge_input_dialog(self, label_list=[]):
+        if len(label_list) > 0:
+            dialog = ListDialog(label_list, 'Select Label', self)
+
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                selected_label = dialog.selected_text
+                return selected_label
+        return False
+
     def show_open_project_dialog(self):
         project_list = []
         if not os.path.exists(PROJECTS_PATH):
@@ -1256,10 +1315,10 @@ class MainWindow(QMainWindow):
                 project_list.append(project_dir)
 
         if len(project_list) > 0:
-            dialog = OpenProjectDialog(project_list, self)
+            dialog = ListDialog(project_list, 'Open Project', self)
 
             if dialog.exec() == QDialog.DialogCode.Accepted:
-                selected_project = dialog.selected_project
+                selected_project = dialog.selected_text
                 self.app.project_name = selected_project
                 self.app.project_path = f'{PROJECTS_PATH}/{selected_project}'
                 self.app.load_nodes(f'{PROJECTS_PATH}/{selected_project}/{selected_project}_nodes.csv')
