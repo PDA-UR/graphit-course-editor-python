@@ -1450,6 +1450,9 @@ class MainWindow(QMainWindow):
 
             elif reply == QMessageBox.StandardButton.Discard:
                 event.accept()
+            elif reply == QMessageBox.StandardButton.Cancel:
+                event.ignore()
+                return
         else:
             event.accept()
 
