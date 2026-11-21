@@ -1243,7 +1243,12 @@ class MainWindow(QMainWindow):
     
     def show_open_project_dialog(self):
         project_list = []
+        if not os.path.exists(PROJECTS_PATH):
+            os.makedirs(PROJECTS_PATH, exist_ok=True)
         for project_dir in os.listdir(PROJECTS_PATH):
+            if not os.path.isdir(f'{PROJECTS_PATH}/{project_dir}'):
+                continue
+
             project_dir_content = os.listdir(f'{PROJECTS_PATH}/{project_dir}')
             nodes_file = f'{project_dir}_nodes.csv'
             connections_file = f'{project_dir}_connections.csv'
