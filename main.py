@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, pyqtSignal, QPointF, QLineF, QPoint, QRectF
 from PyQt6.QtGui import QColor, QBrush, QPen, QPainter, QWheelEvent, QKeyEvent, QMouseEvent, QCursor, QTransform, QLinearGradient
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QSizePolicy, QTabWidget, QFileDialog, QDialog
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QSizePolicy, QTabWidget, QFileDialog, QDialog, QSplitter
 import sys
 import os
 import time
@@ -939,6 +939,16 @@ class GraphView(QGraphicsView):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setInteractive(True)
 
+        ## TODO: Magic Numbers
+        self.setMinimumSize(200, 200)
+        #self.setMaximumSize(1500, 1000)
+
+        self.setSizePolicy(
+            QSizePolicy.Policy.Ignored,
+            QSizePolicy.Policy.Ignored
+        )
+        self.adjustSize()
+
     def mode_changed(self):
         if self.app.MODE == self.app.MODE_SELECTION:
             self.setDragMode(QGraphicsView.DragMode.RubberBandDrag)
@@ -1188,6 +1198,9 @@ class MainWindow(QMainWindow):
         self.app: QGraphApplication = QApplication.instance()
         self.selection_mode = app.SELECTION_MODE_RECT
 
+        #self.setWindowState(Qt.WindowState.WindowMaximized)
+        self.showMaximized()
+
         self.setWindowTitle(f'Course Graph Creator')
 
         y_layout = QVBoxLayout()
@@ -1198,11 +1211,30 @@ class MainWindow(QMainWindow):
         self.view.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
 
         self.palette_tab_widget = QTabWidget()
+
+        ## TODO: Magic Numbers
+        self.palette_tab_widget.setMinimumWidth(250)
+        self.palette_tab_widget.setMaximumWidth(550)
+        self.palette_tab_widget.setSizePolicy(
+            QSizePolicy.Policy.Preferred,
+            QSizePolicy.Policy.Expanding
+        )
+
         self.node_palette = NodePaletteWidget()
         self.style_palette = StylePaletteWidget()
         self.node_manager = NodeListWidget(self.view)
         self.selection_manager = SelectionManager(self)
         tool_bar_layout = Toolbar(self)
+
+        ## splitter between cavnvas and side bar
+
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+        splitter.addWidget(self.view)
+        splitter.addWidget(self.palette_tab_widget)
+        splitter.setChildrenCollapsible(False)
+        splitter.setStretchFactor(0, 1)
+        splitter.setStretchFactor(1, 0)
+        splitter.setSizes([800, 300]) ## TODO: Magic Numbers?
 
         ## status bar
 
@@ -1224,12 +1256,13 @@ class MainWindow(QMainWindow):
         ## build final layout
 
         x_layout.addLayout(tool_bar_layout)
-        x_layout.addWidget(self.view)
+        #x_layout.addWidget(self.view)
         self.palette_tab_widget.addTab(self.node_palette, 'Palette')
         self.palette_tab_widget.addTab(self.style_palette, 'Styles')
         self.palette_tab_widget.addTab(self.node_manager, 'Node Manager')
         self.palette_tab_widget.addTab(self.selection_manager, 'Selection')
-        x_layout.addWidget(self.palette_tab_widget)
+        x_layout.addWidget(splitter)
+        #x_layout.addWidget(self.palette_tab_widget)
 
         y_layout.addLayout(x_layout)
         y_layout.addLayout(status_bar_layout)
