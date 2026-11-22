@@ -36,6 +36,8 @@ Nodes can be created, moved, arranged, and renamed, as well as connected with ea
 | <img src="./docs/icons/merge.png"> | Merge Nodes |  | Merges all selected nodes into a single node. A name for the new node can be entered with a text input prompt. All connections of merged nodes are retained. |
 | <img src="./docs/icons/lock.png"> | Lock Selection |  | Selected nodes are locked so they can not be moved any more. |
 | <img src="./docs/icons/unlock.png"> | Unlock Selection |  | Selected nodes are unlocked. |
+| <img src="./docs/icons/zoom_to_selection.png"> | Zoom to Selection |  | Move and zoom canvas viewport to show the current selection. |
+| <img src="./docs/icons/zoom_to_graph.png"> | Zoom to Graph |  | Move and zoom canvas viewport to show the whole graph. |
 | <img src="./docs/icons/arrange_square.png"> | Arrange in Square |  | Selected nodes are arranged in a square. Useful when loading a graph without position information. |
 | <img src="./docs/icons/arrange_by_parent_count.png"> | Arrange by Parent Count |  | Selected nodes are arranged vertically by their number of parents. Horizontally, they are distributed evenly. |
 | <img src="./docs/icons/align_vertical.png"> | Align Vertical |  | Selected nodes are aligned along a vertical line. |
