@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, pyqtSignal, QPointF, QLineF, QPoint, QRectF
 from PyQt6.QtGui import QColor, QBrush, QPen, QPainter, QWheelEvent, QKeyEvent, QMouseEvent, QCursor, QTransform, QLinearGradient
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QSizePolicy, QTabWidget, QFileDialog, QDialog, QSplitter
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QFrame, QGraphicsView, QGraphicsScene, QGraphicsItem, QGraphicsProxyWidget, QInputDialog, QGraphicsLineItem, QFrame, QSizePolicy, QTabWidget, QFileDialog, QDialog, QSplitter, QMessageBox
 import sys
 import os
 import time
@@ -23,6 +23,7 @@ class QGraphApplication(QApplication):
     mode_changed = pyqtSignal()
     node_created = pyqtSignal()
     node_deleted = pyqtSignal()
+    state_updated = pyqtSignal()
 
     def __init__(self, *args, **kwargs):
         super().__init__(sys.argv)
@@ -49,6 +50,14 @@ class QGraphApplication(QApplication):
 
         # used for re-mapping node ids
         self.node_id_map = {}
+
+        self.new_state = False
+
+        ## TODO: this can for sure be done more elegantly
+        self.state_updated.connect(self.update_state)
+
+    def update_state(self):
+        self.new_state = True
 
     def connect_nodes(self, source, sink):
         if not self.connection_exists(source, sink):
@@ -98,6 +107,8 @@ class QGraphApplication(QApplication):
 
         df_nodes.to_csv(path_nodes, index=False)
         df_connections.to_csv(path_connections, index=False)
+
+        self.new_state = False
 
     def get_node_by_id(self, id):
         for node in self.nodes:
@@ -159,7 +170,7 @@ class QGraphApplication(QApplication):
         topics = []
         topics_path = self.PATH_LOAD_TOPICS
         topics_path = self.window.show_open_file_dialog('Open Node List')
-        with open(topics_path, 'r') as f:
+        with open(topics_path, 'r', encoding='utf-8') as f:
             for line in f.readlines():
                 topics.append(line.strip())
         return topics
@@ -208,6 +219,8 @@ class Connection():
         self.widget = connection_line
         self.app.window.scene.addItem(self.widget)
 
+        self.app.state_updated.emit()
+
     def set_widget(self, widget):
         self.widget = widget
 
@@ -215,15 +228,18 @@ class Connection():
         line = self.widget.line()
         line.setP1(self.source.get_widget_center())
         self.widget.setLine(line)
+        self.app.state_updated.emit()
 
     def on_sink_moved(self):
         line = self.widget.line()
         line.setP2(self.sink.get_widget_center())
         self.widget.setLine(line)
+        self.app.state_updated.emit()
 
     def delete(self):
         self.app.connections.remove(self)
         self.app.window.scene.removeItem(self.widget)
+        self.app.state_updated.emit()
 
     def __repr__(self):
         return f'{self.source.label} ({self.source.id}) --> {self.sink.label} ({self.sink.id})'
@@ -286,14 +302,17 @@ class Node():
         self.app.nodes.append(self)
         self.color = '#636d83'
         self.app.node_created.emit()
+        self.app.state_updated.emit()
 
     def set_name(self, name):
         self.label = name
         self.widget.rename(name)
+        self.app.state_updated.emit()
 
     def set_color(self, color_code):
         self.color = color_code
         self.widget.set_color(color_code)
+        self.app.state_updated.emit()
 
     def set_widget(self, widget):
         self.widget = widget
@@ -337,6 +356,7 @@ class Node():
         self.app.nodes.remove(self)
         self.widget.delete()
         self.app.node_deleted.emit()
+        self.app.state_updated.emit()
 
     def __lt__(self, other):
         return self.id < other.id
@@ -488,6 +508,7 @@ class NodeWidget(QFrame):
 
     def moveEvent(self, event):
         self.on_move.emit()
+        self.app.state_updated.emit()
 
     def freeze(self):
         self.frozen = True
@@ -597,6 +618,14 @@ class GraphScene(QGraphicsScene):
         for item in self.selectedItems():
             result.append(item)
         return result
+    
+    def get_scene_bounding_box(self, scene_widgets=[]):
+        bounding_box = QRectF(0, 0, 0, 0)
+
+        for scene_widget in scene_widgets:
+             bounding_box = bounding_box.united(scene_widget.sceneBoundingRect())
+
+        return bounding_box
 
     def mouseDoubleClickEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
@@ -1202,6 +1231,42 @@ class GraphView(QGraphicsView):
         self.scene.arrange_square(added_node_list)
         return True
 
+    def set_view_to_selection(self):
+        self.set_view_to_nodes(self.scene.get_selection())
+
+    def set_view_to_graph(self):
+        scene_widgets = []
+
+        for node in self.app.nodes:
+            scene_widgets.append(node.widget.scene_widget)
+        self.set_view_to_nodes(scene_widgets)
+
+    def set_view_to_nodes(self, scene_widgets):
+        bounding_box = self.scene.get_scene_bounding_box(scene_widgets)
+
+        # ensure minimum size
+        center = bounding_box.center()
+
+        width = max(bounding_box.width(), VIEW_BOUNDING_BOX_MIN_WIDTH)
+        height = max(bounding_box.height(), VIEW_BOUNDING_BOX_MIN_HEIGHT)
+
+        bounding_box = QRectF(
+            center.x() - width / 2,
+            center.y() - height / 2,
+            width,
+            height
+        )
+
+        # add padding
+        padding = bounding_box.width() * VIEW_BOUNDING_BOX_PADDING
+        bounding_box = bounding_box.adjusted(
+            -padding, -padding,
+             padding,  padding
+        )
+
+        self.fitInView(bounding_box, Qt.AspectRatioMode.KeepAspectRatio)
+        self.update()
+
 # main application window
 # builds GUI, handles key presses
 class MainWindow(QMainWindow):
@@ -1366,6 +1431,30 @@ class MainWindow(QMainWindow):
                 self.app.mode_changed.emit()
             elif event.key() == Qt.Key.Key_Delete.value:
                 self.scene.delete_selection()
+
+    def closeEvent(self, event):
+        if self.app.new_state:
+            reply = QMessageBox.question(
+                self,
+                "Save before closing?",
+                "Do you want to save your changes before closing?",
+                QMessageBox.StandardButton.Save |
+                QMessageBox.StandardButton.Discard |
+                QMessageBox.StandardButton.Cancel,
+                QMessageBox.StandardButton.Save
+            )
+
+            if reply == QMessageBox.StandardButton.Save:
+                self.save_graph()
+                event.accept()
+
+            elif reply == QMessageBox.StandardButton.Discard:
+                event.accept()
+            elif reply == QMessageBox.StandardButton.Cancel:
+                event.ignore()
+                return
+        else:
+            event.accept()
 
 if __name__ == '__main__':
     app = QGraphApplication(sys.argv)

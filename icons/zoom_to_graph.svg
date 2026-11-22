@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   version="1.1"
+   viewBox="0 0 16.933 16.933"
+   id="svg13"
+   sodipodi:docname="zoom_to_graph.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview13"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="5.4573261"
+     inkscape:cx="-39.213343"
+     inkscape:cy="55.338456"
+     inkscape:window-width="1916"
+     inkscape:window-height="1001"
+     inkscape:window-x="0"
+     inkscape:window-y="77"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg13" />
+  <defs
+     id="defs5">
+    <inkscape:path-effect
+       effect="dashed_stroke"
+       message=""
+       id="path-effect14"
+       is_visible="true"
+       lpeversion="1"
+       numberdashes="4"
+       holefactor="0.6"
+       splitsegments="true"
+       halfextreme="true"
+       unifysegment="true" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect13"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <marker
+       id="marker22_Fnone_S-000000"
+       overflow="visible"
+       markerHeight="0.40000001"
+       markerUnits="userSpaceOnUse"
+       markerWidth="0.40000001"
+       orient="auto"
+       preserveAspectRatio="xMidYMid"
+       viewBox="0 0 1 1"
+       refX="0.0"
+       refY="0.0">
+      <path
+         transform="scale(.5)"
+         d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z"
+         fill-rule="evenodd"
+         id="path1" />
+    </marker>
+    <marker
+       id="marker22_Fnone_S-09b800"
+       overflow="visible"
+       markerHeight="0.40000001"
+       markerUnits="userSpaceOnUse"
+       markerWidth="0.40000001"
+       orient="auto"
+       preserveAspectRatio="xMidYMid"
+       viewBox="0 0 1 1"
+       refX="0.0"
+       refY="0.0">
+      <path
+         transform="scale(.5)"
+         d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z"
+         fill="#09b800"
+         fill-rule="evenodd"
+         id="path2" />
+    </marker>
+    <marker
+       id="marker21_Fnone_S-000000"
+       overflow="visible"
+       markerHeight="0.40000001"
+       markerUnits="userSpaceOnUse"
+       markerWidth="0.40000001"
+       orient="auto"
+       preserveAspectRatio="xMidYMid"
+       viewBox="0 0 1 1"
+       refX="0.0"
+       refY="0.0">
+      <path
+         transform="scale(.5)"
+         d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z"
+         fill-rule="evenodd"
+         id="path3" />
+    </marker>
+    <marker
+       id="marker21_Fnone_S-09b800"
+       overflow="visible"
+       markerHeight="0.4"
+       markerUnits="userSpaceOnUse"
+       markerWidth="0.4"
+       orient="auto"
+       preserveAspectRatio="xMidYMid"
+       viewBox="0 0 1 1">
+      <path
+         transform="scale(.5)"
+         d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z"
+         fill="#09b800"
+         fill-rule="evenodd"
+         id="path4" />
+    </marker>
+    <marker
+       id="Dot_Fnone_S-000000"
+       overflow="visible"
+       markerHeight="0.4"
+       markerUnits="userSpaceOnUse"
+       markerWidth="0.4"
+       orient="auto"
+       preserveAspectRatio="xMidYMid"
+       viewBox="0 0 1 1">
+      <path
+         transform="scale(.5)"
+         d="m5 0c0 2.76-2.24 5-5 5s-5-2.24-5-5 2.3-5 5-5c2.76 0 5 2.24 5 5z"
+         fill-rule="evenodd"
+         id="path5" />
+    </marker>
+  </defs>
+  <path
+     id="rect13"
+     style="fill:#000000;stroke:none;stroke-width:2.63949;stroke-linejoin:round;stroke-dasharray:none"
+     d="m 14.727402,12.13511 c -0.108993,0 -0.21793,0.04197 -0.301445,0.125487 l -1.587469,-1.587469 -1.09632,1.09632 -1.09632,1.09632 1.587469,1.587469 c -0.16703,0.167031 -0.167031,0.43586 0,0.602891 L 14.11019,16.933 H 16.933 v -2.76825 l -1.904153,-1.904153 c -0.08352,-0.08351 -0.192452,-0.125487 -0.301445,-0.125487 z"
+     sodipodi:nodetypes="scccccsccccs"
+     inkscape:path-effect="#path-effect13"
+     inkscape:original-d="m 14.727402,12.13511 c -0.108993,0 -0.21793,0.04197 -0.301445,0.125487 l -1.587469,-1.587469 -1.09632,1.09632 -1.09632,1.09632 1.587469,1.587469 c -0.16703,0.167031 -0.167031,0.43586 0,0.602891 L 14.11019,16.933 H 16.933 v -2.76825 l -1.904153,-1.904153 c -0.08352,-0.08351 -0.192452,-0.125487 -0.301445,-0.125487 z" />
+  <path
+     id="path11"
+     style="fill:none;stroke:#000000;stroke-width:1.29229;stroke-linejoin:round"
+     d="m 11.734313,2.9498691 a 6.1451437,6.1451437 0 0 1 10e-7,8.6905449 6.1451437,6.1451437 0 0 1 -8.6905462,0 6.1451437,6.1451437 0 0 1 3e-7,-8.6905455 6.1451437,6.1451437 0 0 1 8.6905449,6e-7 z" />
+  <text
+     xml:space="preserve"
+     style="font-size:4.93879px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:-0.423325px;word-spacing:0px;text-anchor:middle;fill:#09b800;fill-opacity:1;stroke-width:0.264578"
+     x="7.3791637"
+     y="8.8335743"
+     id="text14"><tspan
+       sodipodi:role="line"
+       id="tspan14"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93879px;font-family:FreeMono;-inkscape-font-specification:'FreeMono Bold';letter-spacing:-0.423325px;fill:#09b800;fill-opacity:1;stroke-width:0.264578"
+       x="7.1675014"
+       y="8.8335743">100%</tspan></text>
+</svg>
