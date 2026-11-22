@@ -118,14 +118,14 @@ class Toolbar(QVBoxLayout):
         ## set view
 
         button_view_to_selection = QPushButton()
-        button_view_to_selection.setIcon(ICON_PLACEHOLDER)
+        button_view_to_selection.setIcon(ICON_ZOOM_TO_SELECTION)
         button_view_to_selection.setIconSize(SIZE_TOOLBAR_ICON)
         button_view_to_selection.clicked.connect(self.window.view.set_view_to_selection)
         button_view_to_selection.setToolTip('Set View to Selection')
         self.addWidget(button_view_to_selection)
 
         button_view_to_graph = QPushButton()
-        button_view_to_graph.setIcon(ICON_PLACEHOLDER)
+        button_view_to_graph.setIcon(ICON_ZOOM_TO_GRAPH)
         button_view_to_graph.setIconSize(SIZE_TOOLBAR_ICON)
         button_view_to_graph.clicked.connect(self.window.view.set_view_to_graph)
         button_view_to_graph.setToolTip('Set View to Graph')
