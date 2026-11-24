@@ -992,6 +992,9 @@ class GraphView(QGraphicsView):
         )
         self.adjustSize()
 
+    def get_viewport_center(self):
+        return self.mapToScene(self.rect().center())
+
     def mode_changed(self):
         if self.app.MODE == self.app.MODE_SELECTION:
             self.setDragMode(QGraphicsView.DragMode.RubberBandDrag)
@@ -1419,6 +1422,12 @@ class MainWindow(QMainWindow):
                 self.show_open_project_dialog()
             elif event.key() == Qt.Key.Key_A.value:
                 self.scene.select_all()
+            elif event.key() == Qt.Key.Key_N.value:
+                label = self.show_label_input_dialog()
+                if len(label) > 0:
+                    pos = self.view.get_viewport_center()
+                    node = Node(label, pos.x(), pos.y())
+                    self.scene.add_node(node)
 
         else:
             if event.key() == Qt.Key.Key_C.value:
