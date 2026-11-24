@@ -634,8 +634,9 @@ class GraphScene(QGraphicsScene):
             if isinstance(item_at_click_position, DraggableProxyWidget):
                 label = self.window.show_label_input_dialog(item_at_click_position.widget().node.label)
                 if len(label) > 0:
-                    item_at_click_position.widget().node.label = label
-                    item_at_click_position.widget().label.setText(label)
+                    item_at_click_position.widget().node.set_name(label)
+                    #item_at_click_position.widget().node.label = label
+                    #item_at_click_position.widget().label.setText(label)
             else:
                 label = self.window.show_label_input_dialog()
                 if len(label) > 0:
