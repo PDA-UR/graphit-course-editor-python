@@ -1001,6 +1001,31 @@ class GraphView(QGraphicsView):
         elif self.app.MODE == self.app.MODE_CUT:
             self.setDragMode(QGraphicsView.DragMode.NoDrag)
 
+    def drawBackground(self, painter, rect):
+        super().drawBackground(painter, rect)
+        selection = self.scene.get_selection()
+        painter.save()
+        painter.resetTransform()
+        zoom_level = self.transform().m11()
+
+        brush = QBrush(QColor('#eeeeee'))
+        pen = QPen(QColor('#000000'), 0)
+        pen.setStyle(Qt.PenStyle.NoPen)
+        painter.setBrush(brush)
+        painter.setPen(pen)
+
+        for scene_widget in selection:
+            pos = QPointF(self.mapFromScene(scene_widget.pos()))
+
+            width = scene_widget.widget().width() * zoom_level
+            radius = width * 1.2
+
+            pos += QPointF(width / 2, scene_widget.widget().height() * zoom_level * 0.5)
+
+            painter.drawEllipse(pos, radius, radius)
+
+        painter.restore()
+
     def drawForeground(self, painter, rect):
         super().drawForeground(painter, rect)
         painter.save()
